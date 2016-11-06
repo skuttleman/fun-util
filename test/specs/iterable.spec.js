@@ -159,6 +159,14 @@ describe('iterable', () => {
       const result = map({ a: 1, b: 2, c: 3 }, (value, key) => key);
       expect(result).toEqual({ a: 'a', b: 'b', c: 'c' });
     });
+
+    it('maps through multiple mapping functions', () => {
+      const doubleIt = number => number * 2;
+      const tripleIt = number => number * 3;
+      const addOne = number => number + 1;
+      const result = map([1, 2, 3, 4, 5], doubleIt, addOne, tripleIt);
+      expect(result).toEqual([9, 15, 21, 27, 33]);
+    });
   });
 
   describe('reduce', () => {

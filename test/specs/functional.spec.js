@@ -1,5 +1,5 @@
 const {
-  complement, compose, memoize, partial, partialReverse, thread
+  complement, compose, ifn, memoize, partial, partialReverse, thread
 } = require('../../src/functional');
 const time = require('../utils/time');
 const callCounter = require('../utils/callCounter');
@@ -30,6 +30,40 @@ describe('functional', () => {
       expect(multiplyThenAdd(2)).toEqual(9);
       expect(multiplyThenAdd(-15)).toEqual(-42);
       expect(isNaN(multiplyThenAdd('apple'))).toEqual(true);
+    });
+  });
+
+  describe('ifn', () => {
+    let spy, dummy = _ => _;
+    
+    beforeEach(() => {
+      spy = jasmine.createSpy('spy');
+    });
+
+    it('returns a function', () => {
+      expect(typeof ifn()).toEqual('function');
+    });
+
+    it('takes a value and applies it to the first function passed', () => {
+      const fn = ifn(spy, dummy, dummy);
+      fn(3);
+      expect(spy).toHaveBeenCalledWith(3);
+    });
+
+    it('invokes the second arg supplied if test passes', () => {
+      const result = ifn(Boolean, () => 1, dummy)(17);
+      expect(result).toEqual(1);
+    });
+
+    it('invokes the third arg supplied if test fails', () => {
+      const result = ifn(Boolean, dummy, () => -1)(null);
+      expect(result).toEqual(-1);
+    });
+
+    it('takes multiple values', () => {
+      const fn = ifn(spy, dummy, dummy);
+      fn(1, 2, 3);
+      expect(spy).toHaveBeenCalledWith(1, 2, 3);
     });
   });
 

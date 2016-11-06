@@ -1,3 +1,4 @@
 module.exports = {
-  join: require('./join')
+  join: require('./join'),
+  toArray: require('./toArray')
 };
