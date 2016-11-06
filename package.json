@@ -15,5 +15,13 @@
     "test": "node_modules/jasmine-node/bin/jasmine-node --verbose test/specs/*"
   },
   "author": "skuttleman@gmail.com",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skuttleman/fun-util.git"
+  },
+  "bugs": {
+    "url": "https://github.com/skuttleman/fun-util/issues"
+  },
+  "homepage": "https://github.com/skuttleman/fun-util#readme"
 }
