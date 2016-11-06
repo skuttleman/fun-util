@@ -1,4 +1,5 @@
 module.exports = {
+  concat: require('./concat'),
   every: require('./every'),
   filter: require('./filter'),
   find: require('./find'),

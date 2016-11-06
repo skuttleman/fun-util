@@ -1,4 +1,4 @@
-const concat = require('../misc/concat');
+const concat = require('../iterable/concat');
 const thread = require('../functional/thread');
 const first = require('./first');
 const rest = require('./rest');

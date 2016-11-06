@@ -1,10 +1,24 @@
 const {
-  every, filter, find, first, forEach, last, map,
-  reduce, rest, reverse, size, sort, truncate
+  concat, every, filter, find, first, forEach, last,
+  map, reduce, rest, reverse, size, sort, truncate
 } = require('../../src/iterable');
 const callCounter = require('../utils/callCounter');
 
 describe('iterable', () => {
+  describe('concat', () => {
+    it('works on arrays', () => {
+      expect(concat([1, 2, 3], [4, 5, 6])).toEqual([1, 2, 3, 4, 5, 6]);
+    });
+
+    it('works on strings', () => {
+      expect(concat('this is', ' ', 'a string')).toEqual('this is a string');
+    });
+
+    it('works on objects', () => {
+      expect(concat({ a: 1 }, { b: 2 })).toEqual({ a: 1, b: 2 });
+    });
+  });
+  
   describe('every', () => {
     it('works on arrays', () => {
       let result = every([1, 'string', () => null, {}], Boolean);
@@ -225,6 +239,10 @@ describe('iterable', () => {
     it('works on strings', () => {
       expect(size('string')).toEqual(6);
       expect(size('')).toEqual(0);
+    });
+
+    it('works on objects', () => {
+      expect(size({ a: 1, b: 2, c: 3 })).toEqual(3);
     });
   });
 

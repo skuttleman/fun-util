@@ -1,4 +1,4 @@
-const concat = require('../misc/concat');
+const concat = require('../iterable/concat');
 const slice = require('../misc/slice');
 const size = require('./size');
 const truncate = require('./truncate');
