@@ -1,0 +1,19 @@
+{
+  "name": "fun-util",
+  "version": "0.1.0",
+  "description": "A collection of reusable helper methods for a variety of occasions.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jasmine": "^2.5.2",
+    "jasmine-node": "^2.0.0"
+  },
+  "scripts": {
+    "test": "node_modules/jasmine-node/bin/jasmine-node --verbose test/specs/*"
+  },
+  "author": "skuttleman@gmail.com",
+  "license": "ISC"
+}
