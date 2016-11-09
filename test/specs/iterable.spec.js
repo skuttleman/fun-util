@@ -1,10 +1,27 @@
 const {
-  concat, every, filter, find, first, forEach, last,
-  map, reduce, rest, reverse, size, sort, truncate
+  any, concat, every, filter, find, first, forEach,
+  last, map, reduce, rest, reverse, size, sort, truncate
 } = require('../../src/iterable');
 const callCounter = require('../utils/callCounter');
 
 describe('iterable', () => {
+  describe('any', () => {
+    it('works on arrays', () => {
+      expect(any(['pig', 'bear', 'zebra'], animal => animal === 'pig')).toEqual(true)
+      expect(any(['pig', 'bear', 'zebra'], animal => animal === 'lion')).toEqual(false)
+    })
+
+    it('works on strings', () => {
+      expect(any('pig, bear, zebra', character => character === ',')).toEqual(true)
+      expect(any('pig, bear, zebra', character => character === '-')).toEqual(false)
+    })
+
+    it('works on objects', () => {
+      expect(any({ a: 'pig', b: 'bear', c: 'zebra' }, animal => animal === 'pig')).toEqual(true)
+      expect(any({ a: 'pig', b: 'bear', c: 'zebra' }, animal => animal === 'lion')).toEqual(false)
+    })
+  })
+
   describe('concat', () => {
     it('works on arrays', () => {
       expect(concat([1, 2, 3], [4, 5, 6])).toEqual([1, 2, 3, 4, 5, 6]);
@@ -18,7 +35,7 @@ describe('iterable', () => {
       expect(concat({ a: 1 }, { b: 2 })).toEqual({ a: 1, b: 2 });
     });
   });
-  
+
   describe('every', () => {
     it('works on arrays', () => {
       let result = every([1, 'string', () => null, {}], Boolean);

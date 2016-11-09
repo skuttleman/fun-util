@@ -1,4 +1,4 @@
-const hasKey = require('../object/hasKey');
+const hasKey = require('../iterable/hasKey');
 
 module.exports = fn => {
   const results = {};

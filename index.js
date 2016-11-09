@@ -1,8 +1,10 @@
-module.exports = {
-  array: require('./src/array'),
-  functional: require('./src/functional'),
-  iterable: require('./src/iterable'),
-  misc: require('./src/misc'),
-  object: require('./src/object'),
-  string: require('./src/string')
-};
+const array = require('./src/array');
+const functional = require('./src/functional');
+const iterable = require('./src/iterable');
+const misc = require('./src/misc');
+const string = require('./src/string');
+
+module.exports = Object.assign(
+  { array, functional, iterable, misc, string },
+  array, functional, iterable, misc, string
+);

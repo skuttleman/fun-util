@@ -1,5 +1,4 @@
-const every = require('../iterable/every');
-const hasKey = require('../object/hasKey');
+const { every, hasKey } = require('../iterable');
 
 const deepCompare = (object1, object2) => {
   const [keys1, keys2] = [object1, object2].map(Object.keys);

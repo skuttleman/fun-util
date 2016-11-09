@@ -8,17 +8,17 @@
 4.2\. [Functional](#functional)  
 4.3\. [Iterable](#iterable)  
 4.4\. [Misc](#misc)  
-4.5\. [Object](#object)  
-4.6\. [String](#string)  
+4.5\. [String](#string)  
 5\. [Testing](#testing)  
 6\. [Contributions](#contributions)  
+6.1\. [Change Notes](#change-notes)  
 7\. [License](#license)  
 
 <a name="synopsis"></a>
 
 ## 1\. Synopsis
 
-A one stop shop for my functional utility needs. This project was designed for me to have a place to get the kinds of functions I use a lot. This is designed to evolve over time.
+A one stop shop for functional utility needs. This project was designed for me to have a place to get the kinds of functions I use a lot. This is designed to evolve over time.
 
 Many of these functions are existing methods in javascript, written to accept the context as the first parameter. Some functions, such as `map` and `reduce` have been extended to work with strings and objects.
 
@@ -57,23 +57,25 @@ map('this is a string', ifn(isIndexDivisibleByTwo, upperCase, identity));
 
 ### 4.1\. Array
 
-#### `join`
+Methods related to arrays.
 
-Joins an `array` to a `string`.
+#### -`join`
+
+The `Array.prototype` method that defaults to no character between items instead of a comma.
 
 ```js
-const join = require('fun-util/array/join');
+const { join } = require('fun-util');
 
 join([1, 2, 3, 4, 'apple']);
 // => '1234apple'
 ```
 
-#### `range`
+#### -`range`
 
 Creates an array from the starting number (inclusive) to the ending number (exclusive) with an optional step.
 
 ```js
-const range = require('fun-util/array/range');
+const { range } = require('fun-util');
 
 range(10);
 // => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -83,12 +85,12 @@ range(0, 12, 3);
 // => [0, 3, 6, 9]
 ```
 
-#### `toArray`
+#### -`toArray`
 
 Returns the passed parameters as an `array`.
 
 ```js
-const toArray = require('fun-util/array/toArray');
+const { toArray } = require('fun-util');
 
 toArray(1, 2, 3);
 // => [1, 2, 3]
@@ -100,23 +102,25 @@ toArray([1, 2, 3]);
 
 ### 4.2\. Functional
 
-#### `apply`
+Basic operations that either accept a function, return a function, or do not care what type of value it receives.
+
+#### -`apply`
 
 Applies an array to a function as individual arguments.
 
 ```js
-const apply = require('fun-util/functional/apply');
+const { apply } = require('fun-util');
 
 apply(a => a, [1, 2, 3]);
 // => 1
 ```
 
-#### `complement`
+#### -`complement`
 
-Creates a function that return the negated value of the function supplied.
+Creates a function that returns the negated value of the function supplied.
 
 ```js
-const complement = require('fun-util/functional/complement');
+const { complement } = require('fun-util');
 
 const isThree = x => x === 3;
 const notThree = complement(isThree);
@@ -126,35 +130,35 @@ notThree(3);
 // => false
 ```
 
-#### `compose`
+#### -`compose`
 
 Creates a function that takes inputs and passes them to last function supplied and then passes the return value to the previous function and so forth, returning the final result.
 
 ```js
-const compose = require('fun-util/functional/compose');
+const { compose } = require('fun-util');
 
 const fn = compose(f, g, h);
 fn(3);
 // => f(g(h(3)));
 ```
 
-#### `identity`
+#### -`identity`
 
 Returns the first value supplied.
 
 ```js
-const identity = require('fun-util/functional/identity');
+const { identity } = require('fun-util');
 
-identity(17);
+identity(17, 3);
 // => 17
 ```
 
-#### `ifn`
+#### -`ifn`
 
 Creates a function with a testFn, successFn, and failFn. The function then takes inputs. If the result of passing those inputs through testFn are truthy, it returns the value of passing those inputs to successFn. Otherwise it returns the value of passing those inputs to failFn.
 
 ```js
-const ifn = require('fun-util/functional/ifn');
+const { ifn } = require('fun-util');
 
 const fn = ifn(condition, successFn, failFn);
 
@@ -162,12 +166,12 @@ fn(1, 2, 3)
 // => condition(1, 2, 3) ? successFn(1, 2, 3) : failFn(1, 2, 3)
 ```
 
-#### `memoize`
+#### -`memoize`
 
 Memoizes a function and returns cached results on subsequent calls with the same input.
 
 ```js
-const memoize = require('fun-util/functional/memoize');
+const { memoize } = require('fun-util');
 
 const memoizedProceedure = memoize(complicatedProceedure);
 memoizedProceedure(impossiblyComplicatedInput);
@@ -176,26 +180,24 @@ memoizedProceedure(impossiblyComplicatedInput);
 //  => Process Completed in 0.0013 miliseconds.
 ```
 
-#### `partial`
+#### -`partial`
 
 Partially applies a function.
 
 ```js
-const partial = require('fun-util/functional/partial');
+const { partial } = require('fun-util');
 
 const infoLogger = partial(console.log, 'INFO:');
 infoLogger('Hello, world!');
 //  => INFO: Hello, world!
 ```
 
-#### `partialReverse`
+#### -`partialReverse`
 
 Applies initial arguments after the subsequent arguments.
 
 ```js
-const partialReverse = require('fun-util/functional/partialReverse');
-const { map, last } = require('fun-util/iterable');
-const toArray = require('fun-util/array/toArray');
+const { last, map, partialReverse, toArray } = require('fun-util');
 
 const hallOfMirrors = partialReverse(map, toArray, last);
 hallOfMirrors([1, 2, 3]);
@@ -203,12 +205,12 @@ hallOfMirrors([1, 2, 3]);
 // => [[1, 2, 3], [1, 2, 3], [1, 2, 3]]
 ```
 
-#### `thread`
+#### -`thread`
 
 Similar to compose, creates a function threads the response of the first function through to the next and so on.
 
 ```js
-const thread = require('fun-util/functional/thread');
+const { thread } = require('fun-util');
 
 const fn = thread(addOne, double, addOne);
 fn(7);
@@ -219,126 +221,156 @@ fn(7);
 
 ### 4.3\. Iterable
 
-#### `concat`
+Methods that apply to iterable objects, arrays, and strings.
+
+#### All Iterable methods
+
+```js
+const { iterable } = require('fun-util');
+Object.keys(iterable);
+// => ['concat', 'every', 'filter', 'find', 'first', 'forEach', 'hasKey', 'last', 'map', 'reduce', 'rest', 'reverse', 'size', 'sort', 'truncate']
+```
+
+#### -`any`
 
 The `Array.prototype` method adapted to work with strings and objects.
 
 ```js
-const concat = require('fun-util/iterable/concat');
+const { any } = require('fun-util');
+
+any({ a: 1, b: 2, c: '3' }, value => value === String(value));
+// => true
+```
+
+#### -`concat`
+
+The `Array.prototype` method adapted to work with strings and objects.
+
+```js
+const { concat } = require('fun-util');
 
 concat({ a: 1 }, { b: 2 });
 // => { a: 1, b: 2 }
 ```
 
-#### `every`
+#### -`every`
 
 The `Array.prototype` method adapted to work with strings and objects.
 
 ```js
-const every = require('fun-util/iterable/every');
-const match = require('fun-util/string/match');
-const partialReverse = require('fun-util/functional/partialReverse');
+const { every } = require('fun-util');
 
-every('asdfghj0', partialReverse(match, /[a-z]/));
+every('asdfghj0', character => character.match(/[a-z]/));
 // => false
 ```
 
-#### `filter`
+#### -`filter`
 
 The `Array.prototype` method adapted to work with strings and objects.
 
 ```js
-const filter = require('fun-util/iterable/filter');
+const { filter } = require('fun-util');
 
-filter({ a: 1, b: 2 c: 'c' }, Number);
+filter({ a: 1, b: 2, c: 'c' }, Number);
 // => { a: 1, b: 2 }
 ```
 
-#### `find`
+#### -`find`
 
 The `Array.prototype` method adapted to work with strings and objects.
 
 ```js
-const find = require('fun-util/iterable/find');
-const match = require('fun-util/string/match');
-const partialReverse = require('fun-util/functional/partialReverse');
+const { find } = require('fun-util');
 
-find('asdfghjk', partialReverse(match, /[A-Z]/));
+find('asdfghjk', character => character.match(/[A-Z]/));
 // => undefined
 ```
 
-#### `first`
+#### -`first`
 
 Returns the first element of an array or string.
 
 ```js
-const first = require('fun-util/iterable/first');
+const { first } = require('fun-util');
 
 first([1, 2, 3]);
 // => 1
 ```
 
-#### `forEach`
+#### -`forEach`
 
 The `Array.prototype` method adapted to work with strings and objects.
 
 ```js
-const forEach = require('fun-util/iterable/forEach');
+const { forEach } = require('fun-util');
 
 forEach('8675309', dialDigitOnPhoneKeyPad);
 // => Jenny
 ```
 
-#### `last`
+#### -`hasKey`
+
+The existing `hasOwnProperty` method for strings, arrays, and objects.
+
+```js
+const { hasKey } = require('fun-util');
+
+hasKey([1, 2, 3, 4], 2);
+// => true
+hasKey('apples', 17);
+// => false
+```
+
+#### -`last`
 
 Returns the last element of an array or string.
 
 ```js
-const last = require('fun-util/iterable/last');
+const { last } = require('fun-util');
 
 last([1, 2, 3]);
 // => 3
 ```
 
-#### `map`
+#### -`map`
 
 The `Array.prototype` method adapted to work with strings and objects. Accepts multiple mapping functions.
 
 ```js
-const map = require('fun-util/iterable/map');
+const { map } = require('fun-util');
 
 map({ a: 1, b: 2, c: 3 }, addOne, double, addOne);
 // => { a: 5, b: 7, c: 9 }
 ```
 
-#### `reduce`
+#### -`reduce`
 
 The `Array.prototype` method adapted to work with strings and objects.
 
 ```js
-const reduce = require('fun-util/iterable/reduce');
+const { reduce } = require('fun-util');
 
 reduce({ a: 1, b: 2, c: 3 }, (total, value) => total + value);
 // => 6
 ```
 
-#### `rest`
+#### -`rest`
 
-Return a slice array or string with the first element removed.
+Returns a new array or string with the first element removed.
 
 ```js
-const rest = require('fun-util/iterable/rest');
+const { rest } = require('fun-util');
 
 rest('value');
 // => 'alue'
 ```
 
-#### `reverse`
+#### -`reverse`
 
 Returns a new array (not mutative) or string with the values reversed.
 
 ```js
-const reverse = require('fun-util/iterable/reverse');
+const { reverse } = require('fun-util');
 const array = [1, 2, 3];
 
 reverse(array);
@@ -347,21 +379,21 @@ array;
 // => [1, 2, 3]
 ```
 
-#### `size`
-The length of a string or array, or the number of an objects keys.
+#### -`size`
+The length of a string or array, or the number of an object's keys.
 
 ```js
-const size = require('fun-util/iterable/size');
+const { size } = require('fun-util');
 size('123456');
 // => 6
 ```
 
-#### `sort`
+#### -`sort`
 
 Returns a new array (not mutative) or string with the values sorted. It takes a method, but by default sorts by `>` and `<` comparisons.
 
 ```js
-const sort = require('fun-util/iterable/sort');
+const { sort } = require('fun-util');
 const array = [10, 3, 2 ,1];
 
 sort(array);
@@ -370,12 +402,12 @@ array;
 // => [10, 3, 2, 1]
 ```
 
-#### `truncate`
+#### -`truncate`
 
 Return a slice array (not mutative) or string with the last element removed.
 
 ```js
-const truncate = require('fun-util/iterable/truncate');
+const { truncate } = require('fun-util');
 
 truncate([1, 2, 3, 4, 5]);
 // => [1, 2, 3, 4]
@@ -385,12 +417,22 @@ truncate([1, 2, 3, 4, 5]);
 
 ### 4.4\. Misc
 
-#### `deepCopy`
+Useful miscellaneous methods.
+
+#### All Misc methods
+
+```js
+const { misc } = require('fun-util');
+Object.keys(misc);
+// => ['deepCopy', 'deepEqual', 'getIn', 'slice']
+```
+
+#### -`deepCopy`
 
 Preforms a deep copy of all nested objects and arrays. Functions are still copied by reference.
 
 ```js
-const deepCopy = require('fun-util/misc/deepCopy');
+const { deepCopy } = require('fun-util');
 
 const x = { a: 1, b: { c: [1, 2, 3], d() { return this.c } } };
 const y = deepCopy(x);
@@ -401,12 +443,12 @@ y.b.d();
 // => [1, 2, 3]
 ```
 
-#### `deepEqual`
+#### -`deepEqual`
 
 Preforms a deep comparison of all nested objects, arrays, and functions.
 
 ```js
-const deepEqual = require('fun-util/misc/deepEqual');
+const { deepEqual } = require('fun-util');
 
 const x = { a: 1, b: ['apple', () => null] };
 const y = { a: 1, b: ['apple', () => null] };
@@ -414,12 +456,12 @@ deepEqual(x, y);
 // => true
 ```
 
-#### `getIn`
+#### -`getIn`
 
 Gets a nested value from a complex object or return undefined.
 
 ```js
-const getIn = require('fun-util/misc/getIn');
+const { getIn } = require('fun-util');
 
 getIn({ a: { b: [{ c: 17 }] } }, 'a', 'b', 0, 'c');
 // => 17
@@ -427,48 +469,41 @@ getIn({ a: 1 }, 'b', 'c', 3, 'd');
 // undefined
 ```
 
-#### `slice`
+#### -`slice`
 
 The existing `slice` method for strings and arrays in "call" form.
 
 ```js
-const slice = require('fun-util/misc/slice');
+const { slice } = require('fun-util');
 
 slice([1, 2, 3, 4], 2);
 // => [3, 4]
 ```
 
-<a name="object"></a>
-
-### 4.5\. Object
-
-#### `hasKey`
-
-The existing `hasOwnProperty` method for strings, arrays, and objects.
-
-```js
-const hasKey = require('fun-util/misc/hasKey');
-
-hasKey([1, 2, 3, 4], 2);
-// => true
-hasKey([1, 2, 3, 4], 17);
-// => false
-```
-
 <a name="string"></a>
 
-### 4.6\. String
+### 4.5\. String
+
+Methods that act on strings.
 
 Several string methods have also been duplicated in call form to make them easier to use as mapping methods.
 
 These include: `lowerCase`, `match`, `replace`, `trim`, and `upperCase`.
 
-#### `split`
+#### All String methods
+
+```js
+const { string } = require('fun-util');
+Object.keys(string);
+// => ['lowerCase', 'match', 'replace', 'split', 'trim', 'upperCase']
+```
+
+#### -`split`
 
 The split string method has been wrapped to split on each character by default.
 
 ```js
-const split = require('fun-util/string/split');
+const { split } = require('fun-util');
 
 'string'.split();
 // => ['string']
@@ -493,6 +528,18 @@ $ npm test
 
 ## 6\. Contributions
 _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman/fun-util](http://www.github.com/skuttleman/fun-util)!
+
+<a name="change-notes"></a>
+
+### 6.1\. Change Notes
+
+#### 0.1.1
+  - All methods are optionally accessible by name without referencing the group.
+  ```js
+  const { iterable, forEach } = require('fun-util');
+  iterable.forEach === forEach;
+  // => true
+  ```
 
 <a name="license"></a>
 
