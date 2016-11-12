@@ -4,15 +4,16 @@
   "description": "A collection of reusable helper methods for a variety of occasions.",
   "main": "index.js",
   "directories": {
-    "test": "test"
+    "test": "./node_modules/jasmine/bin/jasmine.js"
   },
   "dependencies": {},
   "devDependencies": {
+    "colors": "^1.1.2",
     "jasmine": "^2.5.2",
-    "jasmine-node": "^2.0.0"
+    "jasmine-reporter-console": "^1.0.1"
   },
   "scripts": {
-    "test": "node_modules/jasmine-node/bin/jasmine-node --verbose test/specs/*"
+    "test": "./node_modules/jasmine/bin/jasmine.js"
   },
   "author": "skuttleman@gmail.com",
   "license": "ISC",

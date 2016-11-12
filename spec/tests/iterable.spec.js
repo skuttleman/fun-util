@@ -2,7 +2,6 @@ const {
   any, concat, every, filter, find, first, forEach,
   last, map, reduce, rest, reverse, size, sort, truncate
 } = require('../../src/iterable');
-const callCounter = require('../utils/callCounter');
 
 describe('iterable', () => {
   describe('any', () => {
@@ -145,21 +144,21 @@ describe('iterable', () => {
 
   describe('forEach', () => {
     it('works on arrays', () => {
-      const countSpy = callCounter();
+      const countSpy = jasmine.createSpy('countSpy');
       forEach([1, 2, 3, 4, 5], countSpy);
-      expect(countSpy.getCallCount()).toEqual(5);
+      expect(countSpy).toHaveBeenCalledTimes(5);
     });
 
     it('works on strings', () => {
-      const countSpy = callCounter();
+      const countSpy = jasmine.createSpy('countSpy');
       forEach('this is a string', countSpy);
-      expect(countSpy.getCallCount()).toEqual(16);
+      expect(countSpy).toHaveBeenCalledTimes(16);
     });
 
     it('works on objects', () => {
-      const countSpy = callCounter();
+      const countSpy = jasmine.createSpy('countSpy');
       forEach({ a: 1, b: 2, c: 3 }, countSpy);
-      expect(countSpy.getCallCount()).toEqual(3);
+      expect(countSpy).toHaveBeenCalledTimes(3);
     });
   });
 
