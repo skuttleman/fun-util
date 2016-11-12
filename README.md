@@ -517,7 +517,7 @@ split('string', 't');
 
 ## 5\. Testing
 
-Tests are written using jasmine-node.
+Tests are written using [jasmine](https://jasmine.github.io/).
 
 ```bash
 $ npm i
@@ -533,7 +533,7 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 
 ### 6.1\. Change Notes
 
-#### 0.1.1
+#### 0.2.0
   - All methods are optionally accessible by name without referencing the group.
   ```js
   const { iterable, forEach } = require('fun-util');
