@@ -1,8 +1,6 @@
 const {
   complement, compose, ifn, memoize, partial, partialReverse, thread
 } = require('../../src/functional');
-const time = require('../utils/time');
-const callCounter = require('../utils/callCounter');
 
 describe('functional', () => {
   describe('complement', () => {
@@ -35,7 +33,7 @@ describe('functional', () => {
 
   describe('ifn', () => {
     let spy, dummy = _ => _;
-    
+
     beforeEach(() => {
       spy = jasmine.createSpy('spy');
     });
@@ -73,8 +71,8 @@ describe('functional', () => {
     });
 
     it('returns cached result when it recognizes input', () => {
-      const fn = callCounter();
-      const memoizedFn = memoize(fn);
+      const spy = jasmine.createSpy('memoizeSpy');
+      const memoizedFn = memoize(spy);
 
       memoizedFn(5000);
       memoizedFn(1000);
@@ -83,7 +81,7 @@ describe('functional', () => {
       memoizedFn(5000);
       memoizedFn(1000);
       memoizedFn(5000);
-      expect(fn.getCallCount()).toEqual(2);
+      expect(spy).toHaveBeenCalledTimes(2);
     });
   });
 
