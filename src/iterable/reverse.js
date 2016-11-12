@@ -1,16 +1,12 @@
-const concat = require('../iterable/concat');
-const slice = require('../misc/slice');
-const size = require('./size');
-const truncate = require('./truncate');
+const join = require('../array/join');
 
-const reverse = items => {
-  let truncated = truncate(items);
-  let nextSize = size(truncated);
-  let lastItem = slice(items, nextSize);
-  if (nextSize) {
-    return concat(lastItem, reverse(truncated));
-  }
-  return lastItem;
+const reverse = array => {
+  return [...array].reverse();
 };
 
-module.exports = reverse;
+module.exports = item => {
+  if (item.constructor === String) {
+    return join(reverse(item));
+  }
+  return reverse(item);
+};

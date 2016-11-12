@@ -207,7 +207,7 @@ describe('iterable', () => {
 
     it('works on strings', () => {
       const result = reduce('abc', (object, letter, index) => {
-        return Object.assign({}, object, { [letter]: index });
+        return {...object, [letter]: index };
       }, {});
       expect(result).toEqual({ a: 0, b: 1, c: 2 });
     });

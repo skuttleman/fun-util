@@ -1,3 +1,3 @@
-invoke = require('../utils/invoke');
+const invoke = require('../utils/invoke');
 
 module.exports = invoke('slice');

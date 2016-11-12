@@ -1,6 +1,6 @@
 const concat = require('../iterable/concat');
-const thread = require('../functional/thread');
 const first = require('./first');
+const join = require('../array/join');
 const rest = require('./rest');
 
 const applyMappers = (value, key, item, ...mappers) => {
@@ -18,7 +18,7 @@ const mapObject = (object, ...mappers) => {
   }, {});
 };
 
-const mapArray = (array, ...mappers) => {
+const map = (array, ...mappers) => {
   return array.map((value, key, item) => {
     return applyMappers(value, key, item, ...mappers);
   });
@@ -26,9 +26,9 @@ const mapArray = (array, ...mappers) => {
 
 module.exports = (item, ...mappers) => {
   if (item.constructor === Array) {
-    return mapArray(item, ...mappers);
+    return map(item, ...mappers);
   } else if (item.constructor === String) {
-    return mapArray(item.split(''), ...mappers).join('');
+    return join(map([...item], ...mappers));
   }
   return mapObject(item, ...mappers);
 };

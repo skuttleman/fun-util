@@ -1,30 +1,19 @@
-const thread = require('../functional/thread');
 const join = require('../array/join');
 
 const defaultSorter = (a, b) => {
-  switch (true) {
-    case a < b:
-      return - 1;
-    case a > b:
-      return 1;
-    default:
-      return 0;
+  if (a < b) {
+    return - 1;
+  } else if (a > b) {
+    return 1;
   }
+  return 0;
 };
 
-const sort = (item, sorter) => {
-  let result = [...item];
-  if (sorter instanceof Function) {
-    result.sort(sorter);
-  } else {
-    result.sort(defaultSorter);
-  }
-  return result;
-};
+const sort = (items, sorter) => [...items].sort(sorter || defaultSorter);
 
 module.exports = (item, sorter) => {
   if (item.constructor === String) {
-    return thread(sort, join)(item, sorter);
+    return join(sort(item, sorter));
   }
   return sort(item, sorter);
 };

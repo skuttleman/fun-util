@@ -1,12 +1,12 @@
 const hasKey = require('../iterable/hasKey');
 
 module.exports = fn => {
-  const results = {};
+  const cache = {};
   return input => {
-    if (hasKey(results, input)) {
-      return results[input];
+    if (hasKey(cache, input)) {
+      return cache[input];
     }
-    results[input] = fn(input);
-    return results[input];
+    cache[input] = fn(input);
+    return cache[input];
   };
 };

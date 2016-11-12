@@ -1,4 +1,6 @@
-module.exports = (test, successValue, failValue) => (...input) => {
-  if (test(...input)) return successValue(...input);
-  return failValue(...input);
+module.exports = (condition, succeed, fail) => (...inputs) => {
+  if (condition(...inputs)) {
+    return succeed(...inputs);
+  }
+  return fail(...inputs);
 };

@@ -49,5 +49,10 @@ describe('misc', () => {
       const result = getIn({ a: { b: [] } }, 'a', 'b', 1, 'c');
       expect(result).toEqual(undefined);
     });
+
+    it('returns null values when found', () => {
+      const result = getIn({ a: { b: [null, { c: [1, 2, 'apple'] }] } }, 'a', 'b', 0);
+      expect(result).toEqual(null);
+    });
   });
 });

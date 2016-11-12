@@ -11,7 +11,7 @@ const deepCompare = (object1, object2) => {
 
 const compare = (item1, item2) => {
   if (item1 instanceof Object && item2 instanceof Object) {
-    return deepCompare(item1, item2);
+    return item1 === item2 || deepCompare(item1, item2);
   }
   return item1 === item2;
 };

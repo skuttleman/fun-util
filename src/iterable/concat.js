@@ -1,4 +1,4 @@
-invoke = require('../utils/invoke');
+const invoke = require('../utils/invoke');
 
 module.exports = (...args) => {
   if (args[0].constructor === Object) {

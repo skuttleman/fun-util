@@ -1,10 +1,8 @@
-const reduce = Array.prototype.reduce;
+const identity = require('../functional/identity');
 
 module.exports = (item, reducer, ...args) => {
-  if (item.constructor === Array || item.constructor === String) {
-    return reduce.apply(item, [reducer, ...args]);
-  }
-  return reduce.apply(Object.keys(item), [(result, key) => {
-    return reducer(result, item[key], key, item);
-  }, ...args]);
+  const transform = (item.constructor === Object) ? identity : Number;
+  return Object.keys(item).reduce((result, key) => {
+    return reducer(result, item[key], transform(key), item);
+  }, ...args);
 };

@@ -6,8 +6,7 @@ const isNotNullOrUndefined = value => {
 
 const isDigable = (object, key) => {
   return (isNotNullOrUndefined(object) || undefined) &&
-    (isNotNullOrUndefined(object[key]) || undefined) &&
-    object[key];
+    (isNotNullOrUndefined(object[key]) || object[key]);
 };
 
 const getIn = (object, ...paths) => {
