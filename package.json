@@ -14,7 +14,7 @@
     "babel-register": "^6.18.0",
     "colors": "^1.1.2",
     "jasmine": "^2.5.2",
-    "jasmine-reporter-console": "^1.0.1"
+    "jasmine-spec-reporter": "^2.7.0"
   },
   "scripts": {
     "test": "./node_modules/jasmine/bin/jasmine.js"

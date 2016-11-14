@@ -1,5 +1,8 @@
-const Reporter = require('jasmine-reporter-console');
+const Reporter = require('jasmine-spec-reporter');
+const jasmineEnv = jasmine.getEnv();
 
-jasmine.getEnv().clearReporters();
+jasmineEnv.clearReporters();
 
-jasmine.getEnv().addReporter(new Reporter);
+jasmineEnv.addReporter(new Reporter({
+  displayStacktrace: 'summary'
+}));
