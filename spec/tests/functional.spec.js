@@ -1,5 +1,5 @@
 const {
-  complement, compose, ifn, memoize, partial, partialReverse, thread
+  complement, compose, ifn, memoize, partial, partialReverse, thread, through
 } = require('../../src/functional');
 
 describe('functional', () => {
@@ -110,6 +110,20 @@ describe('functional', () => {
       expect(addThenMultiply(2)).toEqual(15);
       expect(addThenMultiply(-15)).toEqual(-36);
       expect(isNaN(addThenMultiply('apple'))).toEqual(true);
+    });
+  });
+
+  describe('through', () => {
+    it('passes the inputs through the function', () => {
+      const spy = jasmine.createSpy('spy');
+      through(spy)(3, 4, 5);
+      expect(spy).toHaveBeenCalledWith(3, 4, 5);
+    });
+
+    it('returns its first input', () => {
+      const spy = jasmine.createSpy('spy').and.returnValue(17);
+      const output = through(spy)(3, -3);
+      expect(output).toEqual(3);
     });
   });
 });

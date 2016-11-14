@@ -8,7 +8,8 @@
 4.2\. [Functional](#functional)  
 4.3\. [Iterable](#iterable)  
 4.4\. [Misc](#misc)  
-4.5\. [String](#string)  
+4.5\. [Promise](#promise)  
+4.6\. [String](#string)  
 5\. [Testing](#testing)  
 6\. [Contributions](#contributions)  
 6.1\. [Change Notes](#change-notes)  
@@ -215,6 +216,25 @@ const { thread } = require('fun-util');
 const fn = thread(addOne, double, addOne);
 fn(7);
 // => 17
+```
+
+#### -`through`
+
+Returns a function that passes arguments through a function but returns the original input.
+
+```js
+const { map, through } = require('fun-util');
+
+map([1, 2, 3], console.log, number => number * 2);
+// 1 0 [ 1, 2, 3 ]
+// 2 1 [ 1, 2, 3 ]
+// 3 2 [ 1, 2, 3 ]
+// => [ NaN, NaN, NaN ]
+map([1, 2, 3], through(console.log), number => number * 2);
+// 1 0 [ 1, 2, 3 ]
+// 2 1 [ 1, 2, 3 ]
+// 3 2 [ 1, 2, 3 ]
+// => [2, 4, 6]
 ```
 
 <a name="iterable"></a>
@@ -480,9 +500,67 @@ slice([1, 2, 3, 4], 2);
 // => [3, 4]
 ```
 
+<a name="promise"></a>
+
+### 4.5\. Promise
+
+Helpers built on the standard Promise library.
+
+#### All Promise methods
+
+```js
+const { promise } = require('fun-util');
+Object.keys(promise);
+// => ['chain', 'rejectThrough', 'resolveThrough']
+```
+
+#### -`chain`
+
+Chain promises that run in the order provided. A simpler way to write a promise chain if your
+promises are order dependent but do not require data from each other.
+
+```js
+const { chain } = require('fun-util');
+
+const reseedTestData() => {
+  return chain([
+    () => sql('DELETE * FROM TABLE'),
+    () => sql('DELETE * FROM OTHER TABLE'),
+    () => sql('INSERT INTO TABLE...'),
+    () => sql('INSERT INTO OTHER TABLE...')
+  ]);
+};
+```
+
+#### -`rejectThrough`
+
+A version of `through` that works with promises. This rejects the data passed through it.
+
+```js
+const { rejectThrough } = require('fun-util');
+
+doSomethingImportant()
+  .catch(rejectThrough(writeToLogFile))
+  .then(finishSuccessfully, finishUnsuccessfully);
+// => finishUnsuccessfully(error)
+```
+
+#### -`resolveThrough`
+
+A version of `through` that works with promises. This resolves the data passed through it.
+
+```js
+const { resolveThrough } = require('fun-util');
+
+doSomethingImportant()
+  .then(resolveThrough(debugLog))
+  .then(finishSuccessfully, finishUnsuccessfully);
+// => finishSuccessfully(data)
+```
+
 <a name="string"></a>
 
-### 4.5\. String
+### 4.6\. String
 
 Methods that act on strings.
 

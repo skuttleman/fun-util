@@ -7,5 +7,6 @@ module.exports = {
   memoize: require('./memoize'),
   partial: require('./partial'),
   partialReverse: require('./partialReverse'),
-  thread: require('./thread')
+  thread: require('./thread'),
+  through: require('./through')
 };
