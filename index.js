@@ -1,9 +1,9 @@
-const array = require('./src/array');
-const functional = require('./src/functional');
-const iterable = require('./src/iterable');
-const misc = require('./src/misc');
-const promise = require('./src/promise');
-const string = require('./src/string');
+const array = require('./lib/array');
+const functional = require('./lib/functional');
+const iterable = require('./lib/iterable');
+const misc = require('./lib/misc');
+const promise = require('./lib/promise');
+const string = require('./lib/string');
 
 module.exports = Object.assign(
   { array, functional, iterable, misc, promise, string },

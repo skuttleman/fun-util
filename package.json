@@ -14,12 +14,15 @@
     "babel-register": "^6.18.0",
     "colors": "^1.1.2",
     "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
     "gulp-jasmine": "^2.4.2",
     "jasmine": "^2.5.2",
     "jasmine-spec-reporter": "^2.7.0"
   },
   "scripts": {
-    "test": "./node_modules/gulp/bin/gulp.js"
+    "prepublish": "./node_modules/gulp/bin/gulp.js test && ./node_modules/gulp/bin/gulp.js transpile",
+    "test": "./node_modules/gulp/bin/gulp.js",
+    "test:watch": "./node_modules/gulp/bin/gulp.js test:watch"
   },
   "author": "skuttleman@gmail.com",
   "license": "ISC",
