@@ -1,11 +1,20 @@
-const array = require('./lib/array');
-const functional = require('./lib/functional');
-const iterable = require('./lib/iterable');
-const misc = require('./lib/misc');
-const promise = require('./lib/promise');
-const string = require('./lib/string');
+'use strict';
 
-module.exports = Object.assign(
-  { array, functional, iterable, misc, promise, string },
-  array, functional, iterable, misc, promise, string
-);
+function exp(modules) {
+  return Object.keys(modules).reduce(function(object, moduleName) {
+    object[moduleName] = modules[moduleName];
+    Object.keys(modules[moduleName]).forEach(function(method) {
+      object[method] = modules[moduleName][method];
+    });
+    return object;
+  }, {});
+}
+
+module.exports = exp({
+  array: require('./lib/array'),
+  functional: require('./lib/functional'),
+  iterable: require('./lib/iterable'),
+  misc: require('./lib/misc'),
+  promise: require('./lib/promise'),
+  string: require('./lib/string')
+});

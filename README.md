@@ -611,6 +611,12 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 
 ### 6.1\. Change Notes
 
+#### 0.4.2
+  - Transpile to ES5 before publishing module.
+
+#### 0.4.0
+  - Add Promise methods.
+
 #### 0.2.0
   - All methods are optionally accessible by name without referencing the group.
   ```js
