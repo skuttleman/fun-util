@@ -2,6 +2,7 @@ const concat = require('../iterable/concat');
 const first = require('./first');
 const join = require('../array/join');
 const rest = require('./rest');
+const type = require('../utils/type');
 
 const applyMappers = (value, key, item, ...mappers) => {
   if (mappers.length) {
@@ -25,10 +26,12 @@ const map = (array, ...mappers) => {
 };
 
 module.exports = (item, ...mappers) => {
-  if (item.constructor === Array) {
-    return map(item, ...mappers);
-  } else if (item.constructor === String) {
-    return join(map([...item], ...mappers));
+  switch (type(item)) {
+    case 'array':
+      return map(item, ...mappers);
+    case 'string':
+      return join(map([...item], ...mappers));
+    default:
+      return mapObject(item, ...mappers);
   }
-  return mapObject(item, ...mappers);
 };

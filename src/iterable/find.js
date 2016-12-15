@@ -1,10 +1,10 @@
-const objectIterator = require('../utils/objectIterator');
+const { objectIterator, type } = require('../utils');
 
 module.exports = (item, condition) => {
-  if (item.constructor === Array || item.constructor === String) {
+  let itemType = type(item);
+  if (itemType === 'array' || itemType === 'string') {
     return Array.prototype.find.call(item, condition);
   }
   let key = objectIterator(item, 'find', condition);
-  if (key === undefined) return;
-  return [key, item[key]];
+  return key === undefined ? undefined : [key, item[key]];
 }

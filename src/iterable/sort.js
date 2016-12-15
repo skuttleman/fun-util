@@ -1,4 +1,5 @@
 const join = require('../array/join');
+const type = require('../utils/type');
 
 const defaultSorter = (a, b) => {
   if (a < b) {
@@ -12,7 +13,7 @@ const defaultSorter = (a, b) => {
 const sort = (items, sorter) => [...items].sort(sorter || defaultSorter);
 
 module.exports = (item, sorter) => {
-  if (item.constructor === String) {
+  if (type(item) === 'string') {
     return join(sort(item, sorter));
   }
   return sort(item, sorter);

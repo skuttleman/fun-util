@@ -1,8 +1,9 @@
-const objectIterator = require('../utils/objectIterator');
+const { objectIterator, type } = require('../utils');
 
 module.exports = (item, condition) => {
-  if (item.constructor === Array || item.constructor === String) {
+  let itemType = type(item);
+  if (itemType === 'array' || itemType === 'string') {
     return Array.prototype.some.call(item, condition);
   }
   return objectIterator(item, 'some', condition);
-}
+};

@@ -354,13 +354,29 @@ last([1, 2, 3]);
 
 #### -`map`
 
-The `Array.prototype` method adapted to work with strings and objects. Accepts multiple mapping functions.
+The `Array.prototype` method adapted to work with strings and objects. It accepts multiple mapping functions.
 
 ```js
 const { map } = require('fun-util');
 
 map({ a: 1, b: 2, c: 3 }, addOne, double, addOne);
 // => { a: 5, b: 7, c: 9 }
+```
+
+#### -`mapFilter`
+
+A combination of `map` and `filter`. If the map-filtering function returns `undefined`, the value is filtered
+out. Otherwise it is mapped to the new output. This works with objects, arrays, and strings.
+
+```js
+const { mapFilter } = require('fun-util');
+
+mapFilter({ a: 1, b: 2, c: 3 }, (value, key) => {
+  if (key !== 'b') {
+    return value - 1;
+  }
+});
+// => { a: 0, c: 2 }
 ```
 
 #### -`reduce`
@@ -610,6 +626,9 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 <a name="change-notes"></a>
 
 ### 6.1\. Change Notes
+
+#### 0.5.0
+  - Added mapFilter to iterable methods.
 
 #### 0.4.2
   - Transpile to ES5 before publishing module.

@@ -1,5 +1,6 @@
 const concat = require('../iterable/concat');
 const join = require('../array/join');
+const type = require('../utils/type');
 
 const filter = (object, condition) => {
   return Object.keys(object).reduce((result, key) => {
@@ -11,10 +12,12 @@ const filter = (object, condition) => {
 };
 
 module.exports = (item, condition) => {
-  if (item.constructor === Array) {
-    return item.filter(condition);
-  } else if (item.constructor === String) {
-    return join(Array.prototype.filter.call(item, condition));
+  switch (type(item)) {
+    case 'array':
+      return item.filter(condition);
+    case 'string':
+      return join(Array.prototype.filter.call(item, condition));
+    default:
+      return filter(item, condition);
   }
-  return filter(item, condition);
 };

@@ -1,6 +1,6 @@
 const {
-  any, concat, every, filter, find, first, forEach,
-  last, map, reduce, rest, reverse, size, sort, truncate
+  any, concat, every, filter, find, first, forEach, last,
+  map, mapFilter, reduce, rest, reverse, size, sort, truncate
 } = require('../../src/iterable');
 
 describe('iterable', () => {
@@ -196,6 +196,26 @@ describe('iterable', () => {
       const addOne = number => number + 1;
       const result = map([1, 2, 3, 4, 5], doubleIt, addOne, tripleIt);
       expect(result).toEqual([9, 15, 21, 27, 33]);
+    });
+  });
+
+  describe('mapFilter', () => {
+    it('works on arrays', () => {
+      const fn = number => number % 2 === 0 ? number * 2 : undefined;
+      const result = mapFilter([1, 2, 3, 4, 5, 6], fn);
+      expect(result).toEqual([4, 8, 12]);
+    });
+
+    it('works on strings', () => {
+      const fn = letter => letter === letter.toUpperCase() ? letter.toLowerCase() : undefined;
+      const result = mapFilter('This Is the Song That Never Ends!', fn);
+      expect(result).toEqual('t i  s t n e!');
+    });
+
+    it('works on objects', () => {
+      const fn = value => value % 2 !== 0 ? value % 3 === 0 : undefined;
+      const result = mapFilter({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6 }, fn);
+      expect(result).toEqual({ a: false, c: true, e: false });
     });
   });
 

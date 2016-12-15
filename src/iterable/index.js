@@ -9,6 +9,7 @@ module.exports = {
   hasKey: require('./hasKey'),
   last: require('./last'),
   map: require('./map'),
+  mapFilter: require('./mapFilter'),
   reduce: require('./reduce'),
   rest: require('./rest'),
   reverse: require('./reverse'),
