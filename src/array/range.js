@@ -12,9 +12,12 @@ const range = (start, stop, step) => {
 };
 
 module.exports = (...args) => {
-  let [start, stop] = args;
-  let step = Math.abs(args[2]) || 1;
-  if (!args.length) return [];
-  if (args.length === 1) return range(0, start, step);
-  return range(...map([start, stop, step], Math.round));
+  let [start, stop, step] = map(args, Math.round);
+  step = Math.abs(step) || 1;
+  if (!args.length) {
+    return [];
+  } else if (args.length === 1) {
+    return range(0, start, step);
+  }
+  return range(start, stop, step);
 };

@@ -59,5 +59,10 @@ describe('array', () => {
       const output = range(10, 1, 3);
       expect(output).toEqual([10, 7, 4]);
     });
+
+    it('rounds all inputs', () => {
+      const output = range(1.5, 12.2, 1.7);
+      expect(output).toEqual([2, 4, 6, 8, 10]);
+    });
   });
 });
