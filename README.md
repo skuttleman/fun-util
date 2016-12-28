@@ -161,10 +161,15 @@ Creates a function with a testFn, successFn, and failFn. The function then takes
 ```js
 const { ifn } = require('fun-util');
 
+const condition = (a, b, c) => a === b && a === c;
+const successFn = (a, b, c) => a + b + c;
+const failFn = (a, b, c) => a - b - c;
 const fn = ifn(condition, successFn, failFn);
 
-fn(1, 2, 3)
-// => condition(1, 2, 3) ? successFn(1, 2, 3) : failFn(1, 2, 3)
+fn(1, 2, 3);
+// => -4
+fn(4, 4, 4);
+// => 12
 ```
 
 #### -`memoize`
@@ -178,7 +183,26 @@ const memoizedProceedure = memoize(complicatedProceedure);
 memoizedProceedure(impossiblyComplicatedInput);
 // => Process Completed in 5,000 earth years.
 memoizedProceedure(impossiblyComplicatedInput);
-//  => Process Completed in 0.0013 miliseconds.
+// => Process Completed in 0.0013 miliseconds.
+```
+
+#### -`overload`
+
+Enforces arity and simulates method overloading. This uses the `length` of the function which ignores rest parameter.
+See [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/length) for more information.
+
+```js
+const { overload } = require('fun-util');
+
+const addNumbers = (a, b) => a + b;
+const addTwo = a => add(a, 2);
+const add = overload(addNumbers, addTwo);
+add(2);
+// => 4
+add(1, 7);
+// => 8
+add(1, 2, 3, 4);
+// => Error: ArityMismatch: No method with length: 0
 ```
 
 #### -`partial`

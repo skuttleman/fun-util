@@ -5,6 +5,7 @@ module.exports = {
   identity: require('./identity'),
   ifn: require('./ifn'),
   memoize: require('./memoize'),
+  overload: require('./overload'),
   partial: require('./partial'),
   partialReverse: require('./partialReverse'),
   thread: require('./thread'),

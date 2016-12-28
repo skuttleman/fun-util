@@ -1,8 +1,49 @@
 const {
-  complement, compose, ifn, memoize, partial, partialReverse, thread, through
+  overload, complement, compose, ifn, memoize, partial,
+  partialReverse, thread, through
 } = require('../../src/functional');
 
 describe('functional', () => {
+  describe('overload', () => {
+    it('calls first arity-matching function', () => {
+      const goodSpy = jasmine.createSpy('goodSpy');
+      const badSpy = jasmine.createSpy('badSpy');
+      const someFunction = (a, b, c, d) => goodSpy();
+      const someOtherFunction = (a, b, c, d) => badSpy();
+
+      const method = overload(someFunction, someOtherFunction);
+      method(1, 2, 3, 4);
+      expect(goodSpy).toHaveBeenCalled();
+      expect(badSpy).not.toHaveBeenCalled();
+    });
+
+    it('does not call function if arity does not match', () => {
+      const aritySpy = jasmine.createSpy('aritySpy');
+      const someFunction = a => aritySpy();
+
+      const method = overload(someFunction, (a, b, c, d) => null);
+      method(1, 2, 3, 4);
+      expect(aritySpy).not.toHaveBeenCalled();
+    });
+
+    it('throws an exception if not arity matches', () => {
+      const method = overload();
+      expect(method).toThrow(new Error('ArityMismatch: No function found with 0 argument(s).'));
+    });
+
+    it('ignores arguments that are not functions', () => {
+      const aritySpy = jasmine.createSpy('aritySpy');
+      const nonFunction = [1, 2, 3];
+      const someFunction = (a, b, c) => {
+        aritySpy();
+      };
+
+      const method = overload(nonFunction, someFunction);
+      method(1, 2, 3);
+      expect(aritySpy).toHaveBeenCalled();
+    });
+  });
+
   describe('complement', () => {
     it('returns the complemented result when invoked', () => {
       const isNumber = input => Number(input) === 0 || !!Number(input);
