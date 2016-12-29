@@ -190,19 +190,24 @@ memoizedProceedure(impossiblyComplicatedInput);
 
 Enforces arity and simulates method overloading. This uses the `length` of the function which ignores rest parameter.
 See [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/length) for more information.
+Add an `orElse` clause to overwrite default error throwing.
 
 ```js
-const { overload } = require('fun-util');
+const { overload, toArray } = require('fun-util');
 
 const addNumbers = (a, b) => a + b;
 const addTwo = a => add(a, 2);
 const add = overload(addNumbers, addTwo);
+const addOrElse = overload(addNumbers, addTwo).orElse(toArray);
+
 add(2);
 // => 4
 add(1, 7);
 // => 8
 add(1, 2, 3, 4);
-// => Error: ArityMismatch: No method with length: 0
+// => Error: ArityMismatch: No function found with 4 argument(s).
+addOrElse(1, 2, 3, 4);
+// => [1, 2, 3, 4]
 ```
 
 #### -`partial`
@@ -650,6 +655,12 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 <a name="change-notes"></a>
 
 ### 6.1\. Change Notes
+
+#### 0.7.0
+  -- Added .orElse method to overload.
+
+#### 0.6.0
+  -- Added overload to functional methods.
 
 #### 0.5.0
   - Added mapFilter to iterable methods.
