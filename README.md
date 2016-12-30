@@ -60,6 +60,14 @@ map('this is a string', ifn(isIndexDivisibleByTwo, upperCase, identity));
 
 Methods related to arrays.
 
+### All Array Methods
+
+```js
+const { array } = require('fun-util');
+Object.keys(array);
+// => ['join', 'range', 'toArray']
+```
+
 #### -`join`
 
 The `Array.prototype` method that defaults to no character between items instead of a comma.
@@ -104,6 +112,14 @@ toArray([1, 2, 3]);
 ### 4.2\. Functional
 
 Basic operations that either accept a function, return a function, or do not care what type of value it receives.
+
+#### All Functional Methods
+
+```js
+const { functional } = require('fun-util');
+Object.keys(functional);
+// => ['apply', 'complement', 'compose', 'identity', 'ifn', 'memoize', 'overload', 'partial', 'partialReverse', 'thread', 'through']
+```
 
 #### -`apply`
 
@@ -277,7 +293,7 @@ Methods that apply to iterable objects, arrays, and strings.
 ```js
 const { iterable } = require('fun-util');
 Object.keys(iterable);
-// => ['concat', 'every', 'filter', 'find', 'first', 'forEach', 'hasKey', 'last', 'map', 'reduce', 'rest', 'reverse', 'size', 'sort', 'truncate']
+// => ['any', 'concat', 'every', 'filter', 'find', 'first', 'forEach', 'hasKey', 'last', 'map', 'mapFilter', 'reduce', 'rest', 'reverse', 'size', 'sort', 'takeUntil', 'takeWhile', 'truncate']
 ```
 
 #### -`any`
@@ -465,6 +481,29 @@ sort(array);
 // => [1, 2, 3, 10]
 array;
 // => [10, 3, 2, 1]
+```
+
+#### -`takeUntil`
+
+Takes each element in an array or string until the supplied callback returns a truthy value.
+
+```js
+const { takeUntil } = require('fun-util');
+
+takeUntil([1, 2, 3, 4, 5], number => number > 3);
+// => [1, 2, 3]
+```
+
+
+#### -`takeWhile`
+
+Takes each element in an array or string until the supplied callback returns a falsey value.
+
+```js
+const { takeWhile } = require('fun-util');
+
+takeWhile('this is a string', character => character.match(/\w/));
+// => 'this'
 ```
 
 #### -`truncate`
@@ -655,6 +694,10 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 <a name="change-notes"></a>
 
 ### 6.1\. Change Notes
+
+#### 0.8.0
+  - Add 'iterable/takeWhile' and 'iterable/takeUntil'
+  - Create shell script to update change log from commit messages
 
 #### 0.7.0
   - Add .orElse method to overload.

@@ -1,6 +1,6 @@
 const {
-  any, concat, every, filter, find, first, forEach, last,
-  map, mapFilter, reduce, rest, reverse, size, sort, truncate
+  any, concat, every, filter, find, first, forEach, last, map, mapFilter,
+  reduce, rest, reverse, size, sort, takeUntil, takeWhile, truncate
 } = require('../../src/iterable');
 
 describe('iterable', () => {
@@ -301,6 +301,70 @@ describe('iterable', () => {
       const result = sort('this is a string');
       expect(result).toEqual('   aghiiinrssstt');
     });
+  });
+
+  describe('takeUntil', () => {
+    it('works on arrays', () => {
+      let result = takeUntil([1, 3, 5, 6, 7, 9, 11], number => number % 2 === 0);
+      expect(result).toEqual([1, 3, 5]);
+    });
+
+    it('works on strings', () => {
+      let result = takeUntil('lowerUPPERlower', letter => letter === letter.toUpperCase());
+      expect(result).toEqual('lower');
+    });
+
+    it('takes everything', () => {
+      let array = [1, 2, 3, 4, 5];
+      let result = takeUntil(array, () => false);
+      expect(result).toEqual(array);
+      expect(result == array).toEqual(false);
+    });
+
+    it('takes nothing', () => {
+      let result = takeUntil('lower', () => true);
+      expect(result).toEqual('');
+    });
+
+    it('stops evaluating on first truthy response', () => {
+      let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      const spy = jasmine.createSpy('spy').and.callFake(number => number > 5);
+
+      takeUntil(array, spy);
+      expect(spy).toHaveBeenCalledTimes(6);
+    });
+  });
+
+  describe('takeWhile', () => {
+    it('works on arrays', () => {
+      let result = takeWhile([1, 3, 5, 6, 7, 9, 11], number => number % 2);
+      expect(result).toEqual([1, 3, 5]);
+    });
+
+    it('works on strings', () => {
+      let result = takeWhile('UPPERlowerUPPER', letter => letter === letter.toUpperCase());
+      expect(result).toEqual('UPPER');
+    });
+
+    it('takes everything', () => {
+      let array = [1, 2, 3, 4, 5];
+      let result = takeWhile(array, () => true);
+      expect(result).toEqual(array);
+      expect(result == array).toEqual(false);
+    });
+
+    it('takes nothing', () => {
+      let result = takeWhile('lower', () => false);
+      expect(result).toEqual('');
+    });
+
+    it('stops evaluating on first falsey response', () => {
+      let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      const spy = jasmine.createSpy('spy').and.callFake(number => number <= 5);
+      takeWhile(array, spy);
+
+      expect(spy).toHaveBeenCalledTimes(6);
+    })
   });
 
   describe('truncate', () => {

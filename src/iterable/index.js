@@ -15,5 +15,7 @@ module.exports = {
   reverse: require('./reverse'),
   size: require('./size'),
   sort: require('./sort'),
+  takeUntil: require('./takeUntil'),
+  takeWhile: require('./takeWhile'),
   truncate: require('./truncate')
 };
