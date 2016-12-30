@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+var exec = require('child_process').exec;
+var writeFile = require('fs').writeFile;
+var takeUntil = require('../index').takeUntil;
+
+function promisify() {
+  var fn = arguments[0], args = Array.prototype.slice.call(arguments, 1);
+  return new Promise(function(resolve, reject) {
+    args.push(function(err, data) {
+      if (err) return reject(err);
+      resolve(data);
+    });
+    fn.apply(null, args);
+  });
+}
+
+function getCommitMessages(data) {
+  var commits = data.split('\n').map(function(commit) {
+    return '  - ' + commit.split(' ').slice(1).join(' ');
+  });
+  return takeUntil(commits, function(commit) {
+    return commit === '  - ' || commit.match(/\W{2}\-\W\d+\.\d+.\d+/);
+  });
+}
+
+function addLinesToReadMe(data) {
+  if (!data[0].length) return Promise.resolve('Already up to date');
+  var split = '### 6.1\\. Change Notes\n';
+  var commits = [split, '#### x.x.x'].concat(data[0]);
+  var readme = data[1].split('\n' + split);
+  var newReadme = [readme[0], commits.join('\n'), readme[1]].join('\n');
+  return promisify(writeFile, 'README.md', newReadme);
+}
+
+function logAndExit(code) {
+  return function(message) {
+    if (code) {
+      console.error(message);
+    } else {
+      console.log(message);
+    }
+    process.exit(code);
+  }
+}
+
+Promise.all([
+    promisify(exec, 'git log --pretty=oneline')
+      .then(getCommitMessages),
+    promisify(exec, 'cat README.md')
+  ]).then(addLinesToReadMe)
+  .then(function(output) { return output || 'Updated successfully'; })
+  .then(logAndExit(), logAndExit(1));

@@ -1,6 +1,6 @@
 const {
-  overload, complement, compose, ifn, memoize, partial,
-  partialReverse, thread, through
+  complement, compose, ifn, memoize, overload,
+  partial, partialReverse, thread, through
 } = require('../../src/functional');
 
 describe('functional', () => {

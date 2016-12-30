@@ -657,13 +657,13 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 ### 6.1\. Change Notes
 
 #### 0.7.0
-  -- Added .orElse method to overload.
+  - Add .orElse method to overload.
 
 #### 0.6.0
-  -- Added overload to functional methods.
+  - Add overload to functional methods.
 
 #### 0.5.0
-  - Added mapFilter to iterable methods.
+  - Add mapFilter to iterable methods.
 
 #### 0.4.2
   - Transpile to ES5 before publishing module.
