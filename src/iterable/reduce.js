@@ -1,5 +1,5 @@
 const identity = require('../functional/identity');
-const type = require('../utils/type');
+const type = require('../misc/type');
 
 module.exports = (item, reducer, ...args) => {
   const transform = (type(item) === 'object') ? identity : Number;

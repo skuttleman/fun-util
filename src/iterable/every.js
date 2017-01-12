@@ -1,4 +1,5 @@
-const { objectIterator, type } = require('../utils');
+const objectIterator = require('../utils/objectIterator');
+const type = require('../misc/type');
 
 module.exports = (item, condition) => {
   let itemType = type(item);

@@ -2,7 +2,7 @@ const concat = require('../iterable/concat');
 const first = require('./first');
 const join = require('../array/join');
 const rest = require('./rest');
-const type = require('../utils/type');
+const type = require('../misc/type');
 
 const applyMappers = (value, key, item, ...mappers) => {
   if (mappers.length) {

@@ -5,6 +5,8 @@ module.exports = {
   filter: require('./filter'),
   find: require('./find'),
   first: require('./first'),
+  firstRest: require('./firstRest'),
+  flatMap: require('./flatMap'),
   forEach: require('./forEach'),
   hasKey: require('./hasKey'),
   last: require('./last'),
@@ -17,5 +19,6 @@ module.exports = {
   sort: require('./sort'),
   takeUntil: require('./takeUntil'),
   takeWhile: require('./takeWhile'),
-  truncate: require('./truncate')
+  truncate: require('./truncate'),
+  truncateLast: require('./truncateLast')
 };

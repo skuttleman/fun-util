@@ -293,7 +293,7 @@ Methods that apply to iterable objects, arrays, and strings.
 ```js
 const { iterable } = require('fun-util');
 Object.keys(iterable);
-// => ['any', 'concat', 'every', 'filter', 'find', 'first', 'forEach', 'hasKey', 'last', 'map', 'mapFilter', 'reduce', 'rest', 'reverse', 'size', 'sort', 'takeUntil', 'takeWhile', 'truncate']
+// => ['any', 'concat', 'every', 'filter', 'find', 'first', 'firstRest', 'flatMap', 'forEach', 'hasKey', 'last', 'map', 'mapFilter', 'reduce', 'rest', 'reverse', 'size', 'sort', 'takeUntil', 'takeWhile', 'truncate', 'truncateLast']
 ```
 
 #### -`any`
@@ -360,6 +360,33 @@ const { first } = require('fun-util');
 
 first([1, 2, 3]);
 // => 1
+```
+
+#### -`firstRest`
+
+Combines `first` and `rest` for convenience.
+
+```js
+const { firstRest } = require('fun-util');
+
+let [item, items] = firstRest([1, 2, 3, 4, 5]);
+item
+// => 1
+items
+// => [2, 3, 4, 5]
+```
+
+#### -`flatMap`
+
+This flattens a 2 or more dimensional array and maps the result through mapping functions if provided.
+
+```js
+const { flatMap } = require('flatMap');
+
+flatMap([[1], [[2], 3], 4]);
+// => [1, 2, 3, 4]
+flatMap([[1], [[2], 3], 4], number => number * 2, number => number + 3);
+// => [5, 7, 9, 11]
 ```
 
 #### -`forEach`
@@ -517,6 +544,20 @@ truncate([1, 2, 3, 4, 5]);
 // => [1, 2, 3, 4]
 ```
 
+#### -`truncateLast`
+
+Combines `truncate` and `last` for convenience.
+
+```js
+const { truncateLast } = require('fun-util');
+
+let [items, item] = truncateLast([1, 2, 3, 4, 5]);
+items
+// => [1, 2, 3, 4]
+item
+// => 5
+```
+
 <a name="misc"></a>
 
 ### 4.4\. Misc
@@ -528,7 +569,7 @@ Useful miscellaneous methods.
 ```js
 const { misc } = require('fun-util');
 Object.keys(misc);
-// => ['deepCopy', 'deepEqual', 'getIn', 'slice']
+// => ['deepCopy', 'deepEqual', 'getIn', 'slice', 'type', 'updateIn']
 ```
 
 #### -`deepCopy`
@@ -582,6 +623,33 @@ const { slice } = require('fun-util');
 
 slice([1, 2, 3, 4], 2);
 // => [3, 4]
+```
+
+#### - `type`
+
+An improved version of `typeof` which can tell the difference between 'array' and 'object'.
+
+```js
+const { type } = require('fun-util');
+
+typeof [1, 2, 3];
+// => 'object'
+type([1, 2, 3]);
+// => 'array'
+```
+
+#### - `updateIn`
+
+Copies and sets nested value where the first argument is the starting data structure, the last
+argument is the value to set, and the remaining arguments identify the location to set the value.
+Creates nested arrays and objects as needed.
+
+```js
+
+const { updateIn } = require('fun-util');
+
+updateIn({ x: 'x' }, 'a', 0, 'b', { c: 17 });
+// => { a: [{ b: { c: 17 } }], x: 'x' }
 ```
 
 <a name="promise"></a>
@@ -694,6 +762,10 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 <a name="change-notes"></a>
 
 ### 6.1\. Change Notes
+
+#### 0.9.0
+  - Add 'iterable/firstRest' 'iterable/flatMap', 'iterable/truncateLast', 'misc/type', and 'misc/updateIn'
+  - Add error output when transpiling fails
 
 #### 0.8.0
   - Add 'iterable/takeWhile' and 'iterable/takeUntil'

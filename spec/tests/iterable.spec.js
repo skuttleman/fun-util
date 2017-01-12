@@ -1,6 +1,7 @@
 const {
-  any, concat, every, filter, find, first, forEach, last, map, mapFilter,
-  reduce, rest, reverse, size, sort, takeUntil, takeWhile, truncate
+  any, concat, every, filter, find, first, firstRest, flatMap,
+  forEach, last, map, mapFilter, reduce, rest, reverse, size,
+  sort, takeUntil, takeWhile, truncate, truncateLast
 } = require('../../src/iterable');
 
 describe('iterable', () => {
@@ -139,6 +140,48 @@ describe('iterable', () => {
     it('works on strings', () => {
       expect(first('string')).toEqual('s');
       expect(first('')).toEqual(undefined);
+    });
+  });
+
+  describe('firstRest', () => {
+    it('works on arrays', () => {
+      let [a, b] = firstRest([1, 2, 3, 4, 5]);
+      expect(a).toEqual(1);
+      expect(b).toEqual([2, 3, 4, 5]);
+    });
+
+    it('works on strings', () => {
+      let [a, b] = firstRest('string');
+      expect(a).toEqual('s');
+      expect(b).toEqual('tring');
+    });
+  });
+
+  describe('flatMap', () => {
+    it('works on arrays', () => {
+      const data = [['first', ['second'], 'third'], 'fourth'];
+
+      expect(flatMap(data, word => word.toUpperCase())).toEqual(['FIRST', 'SECOND', 'THIRD', 'FOURTH'])
+    });
+
+    it('works with multiple mapping functions', () => {
+      const spy1 = jasmine.createSpy('spy1');
+      const spy2 = jasmine.createSpy('spy2').and.returnValue(8);
+      let actual = flatMap([1, [2, [3]]], spy1, spy2);
+
+      expect(spy1).toHaveBeenCalledWith(1, 0, [1, 2, 3]);
+      expect(spy1).toHaveBeenCalledWith(2, 1, [1, 2, 3]);
+      expect(spy1).toHaveBeenCalledWith(3, 2, [1, 2, 3]);
+
+      expect(spy2).toHaveBeenCalledWith(undefined, 0, [1, 2, 3]);
+      expect(spy2).toHaveBeenCalledWith(undefined, 1, [1, 2, 3]);
+      expect(spy2).toHaveBeenCalledWith(undefined, 2, [1, 2, 3]);
+
+      expect(actual).toEqual([8, 8, 8]);
+    });
+
+    it('flattens the array if no mapping functions are provided', () => {
+      expect(flatMap([1, [2], 3, [[4], 5], 6])).toEqual([1, 2, 3, 4, 5, 6]);
     });
   });
 
@@ -374,6 +417,20 @@ describe('iterable', () => {
 
     it('works on strings', () => {
       expect(truncate('string')).toEqual('strin');
+    });
+  });
+
+  describe('truncateLast', () => {
+    it('works on arrays', () => {
+      let [a, b] = truncateLast([1, 2, 3, 4, 5]);
+      expect(a).toEqual([1, 2, 3, 4]);
+      expect(b).toEqual(5);
+    });
+
+    it('works on strings', () => {
+      let [a, b] = truncateLast('string');
+      expect(a).toEqual('strin');
+      expect(b).toEqual('g');
     });
   });
 });

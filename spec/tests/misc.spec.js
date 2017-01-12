@@ -1,5 +1,5 @@
 const {
-  deepCopy, deepEqual, getIn
+  deepCopy, deepEqual, getIn, slice, type, updateIn
 } = require('../../src/misc');
 
 describe('misc', () => {
@@ -53,6 +53,80 @@ describe('misc', () => {
     it('returns null values when found', () => {
       const result = getIn({ a: { b: [null, { c: [1, 2, 'apple'] }] } }, 'a', 'b', 0);
       expect(result).toEqual(null);
+    });
+  });
+
+  describe('slice', () => {
+    it('works on arrays', () => {
+      expect(slice([1, 2, 3], 1)).toEqual([2, 3]);
+      expect(slice([1, 2, 3], 0, -1)).toEqual([1, 2]);
+    });
+
+    it('works on strings', () => {
+      expect(slice('lone string', 1)).toEqual('one string');
+      expect(slice('lone string', 0, -1)).toEqual('lone strin');
+    });
+  });
+
+  describe('type', () => {
+    it('recognizes an array', () => {
+      expect(type([])).toEqual('array');
+    });
+
+    it('recognizes a function', () => {
+      expect(type(() => null)).toEqual('function');
+    });
+
+    it('recognizes a number', () => {
+      expect(type(1)).toEqual('number');
+    });
+
+    it('recognizes an object', () => {
+      expect(type({})).toEqual('object');
+      expect(type(null)).toEqual('object');
+    });
+
+    it('recognizes a string', () => {
+      expect(type('something')).toEqual('string');
+    });
+
+    it('recognizes undefined', () => {
+      expect(type(undefined)).toEqual('undefined');
+    });
+  });
+
+  describe('updateIn', () => {
+    let original;
+    beforeEach(() => {
+      original = { a: { b: { c: { d: 1 } } } };
+    });
+
+    it('returns a copy', () => {
+      const someObject = { a: 1 };
+      const newObject = updateIn(original, 'a', 'b', 'c', 'd', 2);
+
+      expect(original).toEqual({ a: { b: { c: { d: 1 } } } });
+      expect(original === newObject).toEqual(false);
+      expect(updateIn(someObject, 1)).toEqual(1);
+      expect(updateIn(someObject) === someObject).toEqual(false);
+    });
+
+    it('sets a value', () => {
+      let newValue = updateIn(original, 'a', 'b', 'c', 'd', 2);
+
+      expect(newValue).toEqual({ a: { b: { c: { d: 2 } } } });
+    });
+
+    it('creates nested objects if key not found', () => {
+      let newValue = updateIn(original, 'b', 'c', 'd', 2);
+
+      expect(newValue).toEqual({ a: { b: { c: { d: 1 } } }, b: { c: { d: 2} } });
+    });
+
+    it('creates nested arrays if integer key not found', () => {
+      let newValue = updateIn(original, 0, 1, '2', 2);
+
+      expect(newValue).toEqual({ a: { b: { c: { d: 1 } } }, 0: [undefined, { 2: 2 }] });
     });
   });
 });

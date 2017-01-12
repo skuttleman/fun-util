@@ -1,4 +1,4 @@
-const type = require('./type');
+const type = require('../misc/type');
 
 const getInitial = item => {
   switch (type(item)) {

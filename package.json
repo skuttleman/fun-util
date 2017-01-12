@@ -20,7 +20,7 @@
     "jasmine-spec-reporter": "^2.7.0"
   },
   "scripts": {
-    "prepublish": "./node_modules/gulp/bin/gulp.js test && ./node_modules/gulp/bin/gulp.js transpile",
+    "prepublish": "rm -rf lib/ && ./node_modules/gulp/bin/gulp.js test && ./node_modules/gulp/bin/gulp.js transpile:all",
     "test": "./node_modules/gulp/bin/gulp.js",
     "test:watch": "./node_modules/gulp/bin/gulp.js test:watch"
   },

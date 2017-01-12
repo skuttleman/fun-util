@@ -9,7 +9,7 @@ const toFilePath = file => {
   return file.split('/src')[1].split('/');
 };
 
-const toFile = file => {
+const toTranspile = file => {
   let filePath = toFilePath(file);
   return `transpile:${filePath.join('/')}`;
 };
@@ -40,14 +40,14 @@ let srcFiles = String(execSync(`ls -1 ${__dirname}/src/**/*`))
   .filter(Boolean);
 
 srcFiles.forEach(file => {
-  var filePath = toFile(file);
-  console.log('adding task:', filePath);
-  gulp.task(filePath, () => gulp.src(file)
+  var taskName = toTranspile(file);
+  console.log('adding task:', taskName);
+  gulp.task(taskName, () => gulp.src(file)
     .pipe(babel())
     .pipe(gulp.dest(`lib/${toDirectory(file)}`)));
 });
 
-gulp.task('transpile', srcFiles.map(toFile));
+gulp.task('transpile:all', srcFiles.map(toTranspile));
 
 gulp.task('test:continue', test());
 

@@ -1,5 +1,6 @@
 const reduce = require('./reduce');
-const { getInitial, type } = require('../utils');
+const getInitial = require('../utils/getInitial');
+const type = require('../misc/type');
 
 const collect = (item, key, value) => {
   let itemType = type(item);

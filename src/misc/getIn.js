@@ -1,4 +1,4 @@
-const { first, rest } = require('../iterable');
+const { firstRest } = require('../iterable');
 
 const isNotNullOrUndefined = value => {
   return value !== null && value !== undefined;
@@ -10,8 +10,7 @@ const isDigable = (object, key) => {
 };
 
 const getIn = (object, ...paths) => {
-  let key = first(paths);
-  let remaining = rest(paths);
+  let [key, remaining] = firstRest(paths);
   if (paths.length) {
     return isDigable(object, key) && getIn(object[key], ...remaining);
   }

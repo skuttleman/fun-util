@@ -1,4 +1,5 @@
-const { invoke, type } = require('../utils');
+const invoke = require('../utils/invoke');
+const type = require('../misc/type');
 
 module.exports = (...args) => {
   if (type(args[0]) === 'object') {
