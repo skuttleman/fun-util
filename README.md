@@ -771,6 +771,10 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 
 ### 6.1\. Change Notes
 
+#### 0.10.0
+  - Add iterable/splitWhen
+  - iterable/forEach, iterable/map, and iterable/reduce take multiple items, and iterable/forEach takes multiple functions
+
 #### 0.9.0
   - Add 'iterable/firstRest' 'iterable/flatMap', 'iterable/truncateLast', 'misc/type', and 'misc/updateIn'
   - Add error output when transpiling fails

@@ -1,7 +1,7 @@
 const {
   any, concat, every, filter, find, first, firstRest, flatMap,
   forEach, last, map, mapFilter, reduce, rest, reverse, size,
-  sort, takeUntil, takeWhile, truncate, truncateLast
+  sort, splitWhen, takeUntil, takeWhile, truncate, truncateLast
 } = require('../../src/iterable');
 
 describe('iterable', () => {
@@ -407,6 +407,28 @@ describe('iterable', () => {
     it('works on strings', () => {
       const result = sort('this is a string');
       expect(result).toEqual('   aghiiinrssstt');
+    });
+  });
+
+  describe('splitWhen', () => {
+    it('works on arrays', () => {
+      const mid = splitWhen([1, 3, 5, 6, 7, 8], number => number % 2 === 0);
+      const beginning = splitWhen([1, 3, 5, 6, 7, 8], number => number === 1);
+      const end = splitWhen([1, 3, 5, 6, 7, 8], number => number === 0);
+
+      expect(mid).toEqual([[1, 3, 5], [6, 7, 8]]);
+      expect(beginning).toEqual([[], [1, 3, 5, 6, 7, 8]]);
+      expect(end).toEqual([[1, 3, 5, 6, 7, 8], []]);
+    });
+
+    it('works on strings', () => {
+      const mid = splitWhen('abcdEFG', letter => letter === letter.toUpperCase());
+      const beginning = splitWhen('abcdEFG', letter => letter === 'a');
+      const end = splitWhen('abcdEFG', letter => letter === 'Z');
+
+      expect(mid).toEqual(['abcd', 'EFG']);
+      expect(beginning).toEqual(['', 'abcdEFG']);
+      expect(end).toEqual(['abcdEFG', '']);
     });
   });
 
