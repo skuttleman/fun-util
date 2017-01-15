@@ -187,21 +187,61 @@ describe('iterable', () => {
 
   describe('forEach', () => {
     it('works on arrays', () => {
-      const countSpy = jasmine.createSpy('countSpy');
-      forEach([1, 2, 3, 4, 5], countSpy);
-      expect(countSpy).toHaveBeenCalledTimes(5);
+      const forEachSpy = jasmine.createSpy('forEachSpy');
+      forEach([1, 2, 3, 4, 5], forEachSpy);
+
+      expect(forEachSpy).toHaveBeenCalledWith(1, 0, [1, 2, 3, 4, 5]);
+      expect(forEachSpy).toHaveBeenCalledWith(2, 1, [1, 2, 3, 4, 5]);
+      expect(forEachSpy).toHaveBeenCalledWith(3, 2, [1, 2, 3, 4, 5]);
+      expect(forEachSpy).toHaveBeenCalledWith(4, 3, [1, 2, 3, 4, 5]);
+      expect(forEachSpy).toHaveBeenCalledWith(5, 4, [1, 2, 3, 4, 5]);
     });
 
     it('works on strings', () => {
-      const countSpy = jasmine.createSpy('countSpy');
-      forEach('this is a string', countSpy);
-      expect(countSpy).toHaveBeenCalledTimes(16);
+      const forEachSpy = jasmine.createSpy('forEachSpy');
+      forEach('string', forEachSpy);
+
+      expect(forEachSpy).toHaveBeenCalledWith('s', 0, 'string');
+      expect(forEachSpy).toHaveBeenCalledWith('t', 1, 'string');
+      expect(forEachSpy).toHaveBeenCalledWith('r', 2, 'string');
+      expect(forEachSpy).toHaveBeenCalledWith('i', 3, 'string');
+      expect(forEachSpy).toHaveBeenCalledWith('n', 4, 'string');
+      expect(forEachSpy).toHaveBeenCalledWith('g', 5, 'string');
     });
 
     it('works on objects', () => {
-      const countSpy = jasmine.createSpy('countSpy');
-      forEach({ a: 1, b: 2, c: 3 }, countSpy);
-      expect(countSpy).toHaveBeenCalledTimes(3);
+      const forEachSpy = jasmine.createSpy('forEachSpy');
+      forEach({ a: 1, b: 2, c: 3 }, forEachSpy);
+
+      expect(forEachSpy).toHaveBeenCalledWith(1, 'a', { a: 1, b: 2, c: 3 });
+      expect(forEachSpy).toHaveBeenCalledWith(2, 'b', { a: 1, b: 2, c: 3 });
+      expect(forEachSpy).toHaveBeenCalledWith(3, 'c', { a: 1, b: 2, c: 3 });
+    });
+
+    it('accepts multiple inputs', () => {
+      const forEachSpy = jasmine.createSpy('forEachSpy');
+      forEach([1, 2, 3], '', {}, forEachSpy);
+
+      expect(forEachSpy).toHaveBeenCalledTimes(3);
+    });
+
+    it('uses keys and context from first input', () => {
+      const forEachSpy = jasmine.createSpy('forEachSpy');
+      forEach([1, 2, 3], 'string', {0: 'soup', ignored: 'value'}, forEachSpy);
+
+      expect(forEachSpy).toHaveBeenCalledWith(1, 's', 'soup', 0, [1, 2, 3]);
+      expect(forEachSpy).toHaveBeenCalledWith(2, 't', undefined, 1, [1, 2, 3]);
+      expect(forEachSpy).toHaveBeenCalledWith(3, 'r', undefined, 2, [1, 2, 3]);
+    });
+
+    it('takes multiple functions', () => {
+      const spy1 = jasmine.createSpy('spy1');
+      const spy2 = jasmine.createSpy('spy2');
+
+      forEach('thing', 'other thing', spy1, spy2);
+
+      expect(spy1).toHaveBeenCalledTimes(5);
+      expect(spy2).toHaveBeenCalledTimes(5);
     });
   });
 
@@ -239,6 +279,14 @@ describe('iterable', () => {
       const addOne = number => number + 1;
       const result = map([1, 2, 3, 4, 5], doubleIt, addOne, tripleIt);
       expect(result).toEqual([9, 15, 21, 27, 33]);
+    });
+
+    it('takes multiple items', () => {
+      const result = map('string', [1, 2, 3, 4, 5, 6], (letter, number) => {
+        return `${letter}-${number}`;
+      });
+
+      expect(result).toEqual('s-1t-2r-3i-4n-5g-6');
     });
   });
 
@@ -278,6 +326,22 @@ describe('iterable', () => {
     it('works on objects', () => {
       const result = reduce({ a: 1, b: 2, c: 3 }, (total, value) => total + value, 6);
       expect(result).toEqual(12);
+    });
+
+    it('works with multiple items', () => {
+      const reduceSpy = jasmine.createSpy('reduceSpy');
+
+      reduce([1, 2, 3], { a: 1, 2: 'two' }, 'st', reduceSpy, null);
+
+      expect(reduceSpy).toHaveBeenCalledWith(null, 1, undefined, 's', 0, [1, 2, 3]);
+      expect(reduceSpy).toHaveBeenCalledWith(undefined, 2, undefined, 't', 1, [1, 2, 3]);
+      expect(reduceSpy).toHaveBeenCalledWith(undefined, 3, 'two', undefined, 2, [1, 2, 3]);
+    });
+
+    it('reduces without default value', () => {
+      expect(reduce({ a: 1, b: 2, c: 3 }, (a, b) => a + b)).toEqual(6);
+      expect(reduce('abcdefg', (_, letter) => letter)).toEqual('g');
+      expect(reduce([1,2,3,4], (a, b) => a * b)).toEqual(24);
     });
   });
 

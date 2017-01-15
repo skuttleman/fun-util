@@ -1,37 +1,41 @@
 const concat = require('../iterable/concat');
-const first = require('./first');
+const firstRest = require('./firstRest');
+const getIn = require('../misc/getIn');
 const join = require('../array/join');
 const rest = require('./rest');
+const splitWhen = require('./splitWhen');
 const type = require('../misc/type');
 
-const applyMappers = (value, key, item, ...mappers) => {
+const applyFns = (value, items, key, mappers) => {
+  let values = rest(items.map(item => item[key]));
   if (mappers.length) {
-    const newValue = first(mappers)(value, key, item);
-    return applyMappers(newValue, key, item, ...rest(mappers));
+    let [mapper, remaining] = firstRest(mappers);
+    return applyFns(mapper(value, ...values, key, items[0]), items, key, remaining);
   }
   return value;
 };
 
-const mapObject = (object, ...mappers) => {
-  return Object.keys(object).reduce((result, key) => {
-    const mapped = applyMappers(object[key], key, object, ...mappers);
-    return concat(result, { [key]: mapped });
+const mapObject = (objects, mappers) => {
+  return Object.keys(objects[0]).reduce((object, key) => {
+    return {
+      ...object,
+      [key]: applyFns(objects[0][key], objects, key, mappers)
+    };
   }, {});
 };
 
-const map = (array, ...mappers) => {
-  return array.map((value, key, item) => {
-    return applyMappers(value, key, item, ...mappers);
+const mapArray = (items, mappers) => {
+  return Array.prototype.map.call(items[0], (value, key) => {
+    return applyFns(value, items, key, mappers);
   });
 };
 
-module.exports = (item, ...mappers) => {
-  switch (type(item)) {
-    case 'array':
-      return map(item, ...mappers);
-    case 'string':
-      return join(map([...item], ...mappers));
-    default:
-      return mapObject(item, ...mappers);
-  }
+const map = (...args) => {
+  const [items, mappers] = splitWhen(args, arg => type(arg) === 'function');
+  return getIn({
+    array: mapArray(items, mappers),
+    string: join(mapArray(items, mappers))
+  }, type(items[0])) || mapObject(items, mappers) ;
 };
+
+module.exports = map;

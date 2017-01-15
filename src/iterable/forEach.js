@@ -1,11 +1,15 @@
-const objectIterator = require('../utils/objectIterator');
 const type = require('../misc/type');
+const splitWhen = require('./splitWhen');
 
-module.exports = (item, action) => {
-  let itemType = type(item);
-  if (itemType === 'array' || itemType === 'string') {
-    Array.prototype.forEach.call(item, action);
-  } else {
-    objectIterator(item, 'forEach', action);
-  }
+const keyType = (item, key) => type(item) === 'object' ? key : Number(key);
+
+const forEach = (...args) => {
+  let [items, fns] = splitWhen(args, arg => type(arg) === 'function');
+  let item = items[0];
+  Object.keys(item).forEach(key => {
+    let values = items.map(item => item[key]);
+    fns.forEach(fn => fn(...values, keyType(item, key), item));
+  });
 };
+
+module.exports = forEach;
