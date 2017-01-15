@@ -204,7 +204,15 @@ memoizedProceedure(impossiblyComplicatedInput);
 
 #### -`overload`
 
-Enforces arity and simulates method overloading. This uses the `length` of the function which ignores rest parameter.
+Enforces arity and simulates method overloading. This uses the `length` of the function which ignores the "rest" parameter and any arguments with default values.
+
+```js
+((a, ...args) => {}).length
+// => 1
+((a, b, c = {}, d = 14) => {}).length
+// => 2
+```
+
 See [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/length) for more information.
 Add an `orElse` clause to overwrite default error throwing.
 

@@ -1,5 +1,3 @@
-const reduce = require('./reduce');
-
 const takeUntil = (array, fn) => {
   let index = array.findIndex(fn);
   if (index === -1) {

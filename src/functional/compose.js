@@ -1,5 +1,6 @@
+const first = require('../iterable/first');
 const identity = require('./identity');
-const { first, truncateLast } = require('../iterable');
+const truncateLast = require('../iterable/truncateLast');
 
 const compose = (...fns) => (...inputs) => {
   if (fns.length) {

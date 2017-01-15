@@ -1,12 +1,17 @@
+const { ArityMismatchError } = require('../utils/errors');
+
 class Context {
   otherwise(...args) {
-    throw new Error(`ArityMismatch: No function found with ${args.length} argument(s).`);
+    throw new ArityMismatchError(args.length);
   }
 }
 
-const makeOverloaded = (context, fns) => (...args) => {
-  const fn = fns.find(fn => fn.length === args.length && typeof fn === 'function');
-  return fn ? fn(...args) : context.otherwise(...args);
+const makeOverloaded = (context, fns) => {
+  const onlyFns = fns.filter(fn => typeof fn === 'function');
+  return (...args) => {
+    const fn = onlyFns.find(fn => fn.length === args.length);
+    return fn ? fn(...args) : context.otherwise(...args);
+  };
 };
 
 const overload = (...fns) => {

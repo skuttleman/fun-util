@@ -2,6 +2,7 @@ const {
   complement, compose, ifn, memoize, overload,
   partial, partialReverse, thread, through
 } = require('../../src/functional');
+const { ArityMismatchError } = require('../../src/utils/errors');
 
 describe('functional', () => {
   describe('complement', () => {
@@ -93,9 +94,17 @@ describe('functional', () => {
       expect(aritySpy).not.toHaveBeenCalled();
     });
 
-    it('throws an exception if no arity matches', () => {
+    it('throws an ArityMismatchError if no arity matches', () => {
       const method = overload();
-      expect(method).toThrow(new Error('ArityMismatch: No function found with 0 argument(s).'));
+
+      expect(method).toThrow(new ArityMismatchError(0));
+
+      try {
+        method(1, 2, 3);
+      } catch (error) {
+        expect(error.message).toEqual('No function found with 3 argument(s).');
+        expect(error.name).toEqual('ArityMismatchError');
+      }
     });
 
     it('ignores arguments that are not functions', () => {

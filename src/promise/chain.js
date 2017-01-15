@@ -1,4 +1,4 @@
-const { reduce } = require('../iterable');
+const reduce = require('../iterable/reduce');
 
 module.exports = ([promise, ...promises]) => {
   let results = [];

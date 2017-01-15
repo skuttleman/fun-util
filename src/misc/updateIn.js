@@ -1,5 +1,6 @@
 const deepCopy = require('./deepCopy');
-const { firstRest, truncateLast } = require('../iterable');
+const firstRest = require('../iterable/firstRest');
+const truncateLast = require('../iterable/truncateLast');
 
 const setup = (item, key) => {
   if (item && typeof item === 'object') {

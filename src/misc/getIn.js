@@ -1,4 +1,4 @@
-const { firstRest } = require('../iterable');
+const firstRest = require('../iterable/firstRest');
 
 const isNotNullOrUndefined = value => {
   return value !== null && value !== undefined;

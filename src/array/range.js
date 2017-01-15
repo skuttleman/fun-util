@@ -1,4 +1,5 @@
-const { concat, map } = require('../iterable');
+const concat = require('../iterable/concat');
+const map = require('../iterable/map');
 
 const range = (start, stop, step) => {
   if (start < stop && start + step < stop) {

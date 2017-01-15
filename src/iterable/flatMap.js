@@ -11,6 +11,6 @@ const flatten = input => {
 
 const flatMap = (input, ...fns) => {
   return map(flatten(input), ...fns);
-}
+};
 
 module.exports = flatMap;
