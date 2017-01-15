@@ -301,7 +301,7 @@ Methods that apply to iterable objects, arrays, and strings.
 ```js
 const { iterable } = require('fun-util');
 Object.keys(iterable);
-// => ['any', 'concat', 'every', 'filter', 'find', 'first', 'firstRest', 'flatMap', 'forEach', 'hasKey', 'last', 'map', 'mapFilter', 'reduce', 'rest', 'reverse', 'size', 'sort', 'takeUntil', 'takeWhile', 'truncate', 'truncateLast']
+// => ['any', 'concat', 'every', 'filter', 'find', 'first', 'firstRest', 'flatMap', 'forEach', 'hasKey', 'last', 'map', 'mapFilter', 'reduce', 'rest', 'reverse', 'size', 'sort', 'splitWhen', 'takeUntil', 'takeWhile', 'truncate', 'truncateLast']
 ```
 
 #### -`any`
@@ -399,13 +399,17 @@ flatMap([[1], [[2], 3], 4], number => number * 2, number => number + 3);
 
 #### -`forEach`
 
-The `Array.prototype` method adapted to work with strings and objects.
+The `Array.prototype` method adapted to work with strings and objects. Takes multiple items and multiple functions.
 
 ```js
 const { forEach } = require('fun-util');
 
-forEach('8675309', dialDigitOnPhoneKeyPad);
-// => Jenny
+forEach('123' [4, 5, 6], (digit1, digit2) => {
+  console.log(digit1, digit2);
+});
+// => '1 4'
+// => '2 5'
+// => '3 6'
 ```
 
 #### -`hasKey`
@@ -434,7 +438,7 @@ last([1, 2, 3]);
 
 #### -`map`
 
-The `Array.prototype` method adapted to work with strings and objects. It accepts multiple mapping functions.
+The `Array.prototype` method adapted to work with strings and objects. It accepts multiple items and multiple mapping functions.
 
 ```js
 const { map } = require('fun-util');
@@ -466,8 +470,8 @@ The `Array.prototype` method adapted to work with strings and objects.
 ```js
 const { reduce } = require('fun-util');
 
-reduce({ a: 1, b: 2, c: 3 }, (total, value) => total + value);
-// => 6
+reduce({ a: 1, b: 2, c: 3 }, [4, 5, 6], (total, value1, value2) => total + value1 + value2);
+// => 21
 ```
 
 #### -`rest`
@@ -516,6 +520,17 @@ sort(array);
 // => [1, 2, 3, 10]
 array;
 // => [10, 3, 2, 1]
+```
+
+#### -`splitWhen`
+
+Splits an array or string starting the second item when an element meets the criteria.
+
+```js
+const { splitWhen } = require('fun-util');
+
+splitWhen('abcdEFGH', letter => letter === letter.toUpperCase());
+// => ['abcd', 'EFGH']
 ```
 
 #### -`takeUntil`
