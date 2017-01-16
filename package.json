@@ -13,6 +13,7 @@
     "babel-preset-stage-1": "^6.16.0",
     "babel-register": "^6.18.0",
     "colors": "^1.1.2",
+    "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-jasmine": "^2.4.2",
@@ -20,8 +21,8 @@
     "jasmine-spec-reporter": "^2.7.0"
   },
   "scripts": {
-    "prepublish": "rm -rf lib/ && ./node_modules/gulp/bin/gulp.js test && ./node_modules/gulp/bin/gulp.js transpile:all",
-    "test": "./node_modules/gulp/bin/gulp.js",
+    "prepublish": "npm test && ./node_modules/gulp/bin/gulp.js transpile:all",
+    "test": "./node_modules/gulp/bin/gulp.js test",
     "test:watch": "./node_modules/gulp/bin/gulp.js test:watch"
   },
   "author": "skuttleman@gmail.com",

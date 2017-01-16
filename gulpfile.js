@@ -3,6 +3,7 @@ require('babel-core/register');
 const babel = require('gulp-babel');
 const execSync = require('child_process').execSync;
 const gulp = require('gulp');
+const del = require('del');
 const jasmine = require('gulp-jasmine');
 
 const toFilePath = file => {
@@ -47,7 +48,13 @@ srcFiles.forEach(file => {
     .pipe(gulp.dest(`lib/${toDirectory(file)}`)));
 });
 
-gulp.task('transpile:all', srcFiles.map(toTranspile));
+gulp.task('clean', () => {
+  return del('lib');
+});
+
+gulp.task('transpile:all', ['clean'], () => {
+  return gulp.start(srcFiles.map(toTranspile));
+});
 
 gulp.task('test:continue', test());
 

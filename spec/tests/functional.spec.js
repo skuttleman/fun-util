@@ -7,7 +7,7 @@ const { ArityMismatchError } = require('../../src/utils/errors');
 describe('functional', () => {
   describe('complement', () => {
     it('returns the complemented result when invoked', () => {
-      const isNumber = input => Number(input) === 0 || !!Number(input);
+      const isNumber = input => typeof input === 'number';
       const isNotNumber = complement(isNumber);
 
       expect(isNotNumber(3)).toEqual(false);
