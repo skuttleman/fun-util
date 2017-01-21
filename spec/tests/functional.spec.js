@@ -1,6 +1,6 @@
 const {
-  complement, compose, ifn, memoize, overload,
-  partial, partialReverse, thread, through
+  complement, compose, enforceTypes, ifn, memoize,
+  overload, partial, partialReverse, thread, through
 } = require('../../src/functional');
 const { ArityMismatchError } = require('../../src/utils/errors');
 
@@ -22,6 +22,91 @@ describe('functional', () => {
       expect(multiplyThenAdd(2)).toEqual(9);
       expect(multiplyThenAdd(-15)).toEqual(-42);
       expect(isNaN(multiplyThenAdd('apple'))).toEqual(true);
+    });
+  });
+
+  describe('enforceTypes', () => {
+    it('accepts valid types', () => {
+      const spy = jasmine.createSpy('spy');
+      const fn = enforceTypes(Number, String, Function, Object, Array, Boolean, spy);
+
+      fn(1, 'string', enforceTypes, {}, [{}, 111], true);
+      expect(spy).toHaveBeenCalledWith(1, 'string', enforceTypes, {}, [{}, 111], true);
+    });
+
+    it('accepts null values', () => {
+      const spy = jasmine.createSpy('spy');
+      const fn = enforceTypes(Array, [String], spy);
+
+      fn(null, null);
+      expect(spy).toHaveBeenCalledWith(null, null);
+    });
+
+    it('throws and error if a type is invalid', () => {
+      const spy = jasmine.createSpy('spy');
+      const fn = enforceTypes(Number, String, spy);
+
+      expect(() => fn('string', 1)).toThrow(new TypeError('Expected "string" to be of Type "Number"'));
+    });
+
+    it('does not accept undefined', () => {
+      const spy = jasmine.createSpy('spy');
+      const fn = enforceTypes(Boolean, spy);
+
+      expect(fn).toThrow();
+    });
+
+    it('checks the items of an array', () => {
+      const spy = jasmine.createSpy('spy');
+      const fn = enforceTypes([String], spy);
+
+      fn(['string', 'string', null]);
+      expect(spy).toHaveBeenCalledWith(['string', 'string', null]);
+
+      expect(() => fn(['string', 17])).toThrow(new TypeError('Expected "17" to be of Type "String"'));
+    });
+
+    it('only tests arguments with a type', () => {
+      const spy = jasmine.createSpy('spy');
+      const fn = enforceTypes([Number], spy);
+
+      expect(() => fn([1, 2, 3], 'something')).not.toThrow();
+      fn([7], {key: 'value'});
+      expect(spy).toHaveBeenCalledWith([1, 2, 3], 'something');
+    });
+
+    it('makes sure all types are functions', () => {
+      const fn = enforceTypes(1, () => null);
+
+      expect(() => fn(1)).toThrow(new TypeError(`Expected Type to be a function, got "1"`));
+    });
+
+    it('works with custom types', () => {
+      class MyType {}
+      const myType1 = new MyType;
+      const myType2 = new MyType;
+
+      const fn = enforceTypes([MyType], () => null);
+
+      expect(() => fn([myType1, myType2])).not.toThrow();
+    });
+
+    it('works with inheritance', () => {
+      class MyType {}
+      const myType = new MyType;
+
+      const fn = enforceTypes(Object, MyType, () => null);
+
+      expect(() => fn(myType, myType)).not.toThrow();
+    });
+
+    it('works with rest arguments', () => {
+      const spy = jasmine.createSpy('spy');
+      const fn = enforceTypes(String, Number, spy).theRestAre(Boolean);
+
+      expect(() => fn('string', 1)).not.toThrow();
+      expect(() => fn('string', 1, true, false, null, true)).not.toThrow();
+      expect(() => fn('string', 1, true, false, {})).toThrow();
     });
   });
 

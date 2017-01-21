@@ -158,6 +158,28 @@ const fn = compose(f, g, h);
 fn(3);
 // => f(g(h(3)));
 ```
+#### -`enforceTypes`
+
+Throws an error if the types passed into the function do no match the type list. The value `null` matches any type.
+
+```js
+const { enforceTypes } = require('fun-util');
+class MyType {}
+const myType = new MyType;
+
+const fn = enforceTypes(Number, [String], MyType, (number, stringArray, myType) => {
+  return 'this works';
+}).theRestAre(Function);
+
+fn(1, ['a', 'b', 'c'], myType);
+// => 'this works'
+fn(null, [], null, () => 'apples', () => 'oranges');
+// => 'this works'
+fn(0, ['string']);
+// => TypeError: Expected "undefined" to be of Type "MyType"
+fn(null, null, null, 'not a function', () => 'function');
+// => TypeError: Expected "not a function" to be of Type "Function"
+```
 
 #### -`identity`
 
@@ -785,6 +807,9 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 <a name="change-notes"></a>
 
 ### 6.1\. Change Notes
+
+#### 0.11.0
+  - Add functional/enforceTypes
 
 #### 0.10.0
   - Add iterable/splitWhen

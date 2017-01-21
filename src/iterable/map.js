@@ -1,4 +1,3 @@
-const concat = require('../iterable/concat');
 const firstRest = require('./firstRest');
 const getIn = require('../misc/getIn');
 const join = require('../array/join');
