@@ -23,5 +23,9 @@ const reduce = (items, reducer, ...args) => {
 
 module.exports = (...args) => {
   let [items, remaining] = splitWhen(args, arg => type(arg) === 'function');
-  return reduce(items, ...remaining);
+  if (Object.keys(first(items)).length) {
+    return reduce(items, ...remaining);
+  } else if (remaining.length > 1) {
+    return remaining[1];
+  }
 };

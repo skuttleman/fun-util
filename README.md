@@ -823,6 +823,9 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 
 ### 6.1\. Change Notes
 
+#### 0.12.1
+  - Fix bug with iterable/reduce when calling on empty collection
+
 #### 0.12.0
   - Add functional/silent
 

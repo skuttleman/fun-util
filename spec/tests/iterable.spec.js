@@ -343,6 +343,22 @@ describe('iterable', () => {
       expect(reduce('abcdefg', (_, letter) => letter)).toEqual('g');
       expect(reduce([1,2,3,4], (a, b) => a * b)).toEqual(24);
     });
+
+    it('works with empty values', () => {
+      expect(reduce('', () => 'result', 'starting value')).toEqual('starting value');
+      expect(reduce({}, () => 'result', 'starting value')).toEqual('starting value');
+      expect(reduce([], () => 'result', 'starting value')).toEqual('starting value');
+
+    });
+
+    it('works with empty values and no starting value', () => {
+      const spy = jasmine.createSpy('reducerSpy');
+
+      expect(reduce('', spy)).toEqual(undefined);
+      expect(reduce({}, spy)).toEqual(undefined);
+      expect(reduce([], spy)).toEqual(undefined);
+      expect(spy).not.toHaveBeenCalled();
+    });
   });
 
   describe('rest', () => {
