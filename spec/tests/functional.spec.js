@@ -1,6 +1,6 @@
 const {
-  complement, compose, enforceTypes, ifn, memoize,
-  overload, partial, partialReverse, thread, through
+  complement, compose, enforceTypes, ifn, memoize, overload,
+  partial, partialReverse, silent, thread, through
 } = require('../../src/functional');
 const { ArityMismatchError } = require('../../src/utils/errors');
 
@@ -244,6 +244,18 @@ describe('functional', () => {
       const fn2 = partialReverse(fn1, 2, 3);
       fn2(4, 5);
       expect(spy).toHaveBeenCalledWith(4, 5, 2, 3, 1);
+    });
+  });
+
+  describe('silent', () => {
+    it('returns the value that the function returns', () => {
+      const spy = jasmine.createSpy('silentSpy').and.returnValue(3);
+      expect(silent(spy)('some arg')).toEqual(3);
+    });
+
+    it('returns the argument when the function throws and error', () => {
+      const spy = jasmine.createSpy('silentSpy').and.callFake(() => {throw new Error('Some error')});
+      expect(silent(spy)('some arg')).toEqual('some arg');
     });
   });
 

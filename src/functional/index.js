@@ -9,6 +9,7 @@ module.exports = {
   overload: require('./overload'),
   partial: require('./partial'),
   partialReverse: require('./partialReverse'),
+  silent: require('./silent'),
   thread: require('./thread'),
   through: require('./through')
 };

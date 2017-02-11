@@ -118,7 +118,7 @@ Basic operations that either accept a function, return a function, or do not car
 ```js
 const { functional } = require('fun-util');
 Object.keys(functional);
-// => ['apply', 'complement', 'compose', 'identity', 'ifn', 'memoize', 'overload', 'partial', 'partialReverse', 'thread', 'through']
+// => ['apply', 'complement', 'compose', 'enforceTypes', 'identity', 'ifn', 'memoize', 'overload', 'partial', 'partialReverse', 'silent', 'thread', 'through']
 ```
 
 #### -`apply`
@@ -158,6 +158,7 @@ const fn = compose(f, g, h);
 fn(3);
 // => f(g(h(3)));
 ```
+
 #### -`enforceTypes`
 
 Throws an error if the types passed into the function do no match the type list. The value `null` matches any type.
@@ -183,7 +184,7 @@ fn(null, null, null, 'not a function', () => 'function');
 
 #### -`identity`
 
-Returns the first value supplied.
+Returns the value supplied and ignores extra arguments.
 
 ```js
 const { identity } = require('fun-util');
@@ -279,6 +280,20 @@ const hallOfMirrors = partialReverse(map, toArray, last);
 hallOfMirrors([1, 2, 3]);
 // => map([1, 2, 3], toArray, last);
 // => [[1, 2, 3], [1, 2, 3], [1, 2, 3]]
+```
+
+#### -`silent`
+
+Applies initial arguments after the subsequent arguments.
+
+```js
+const { silent } = require('fun-util');
+
+const parseJSON = silent(JSON.parse);
+parseJSON('{"some":"data"}');
+// => { some: 'data' }
+parseJSON('not {{json}}');
+// => 'not {{json}}'
 ```
 
 #### -`thread`
@@ -807,6 +822,9 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 <a name="change-notes"></a>
 
 ### 6.1\. Change Notes
+
+#### 0.12.0
+  - Add functional/silent
 
 #### 0.11.0
   - Add functional/enforceTypes
