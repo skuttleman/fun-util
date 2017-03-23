@@ -436,13 +436,16 @@ flatMap([[1], [[2], 3], 4], number => number * 2, number => number + 3);
 
 ### -`flatten`
 
-Flattens a multi-dimensional array.
+Flattens a multi-dimensional array. It completely falttens by default or to a specified depth.
 
 ```js
 const { flatten } = require('fun-util');
 
-flatten([[1], [[2], 3], 4, [[5], 6]]);
+flatten([1, [2, [3, [4, [5, [6]]]]]]);
 // => [1, 2, 3, 4, 5, 6]
+
+flatten([1, [2, [3, [4, [5, [6]]]]]], 2);
+// => [1, 2, 3, [4, [5, [6]]]]
 ```
 
 #### -`forEach`
@@ -833,6 +836,9 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 <a name="change-notes"></a>
 
 ### 6.1\. Change Notes
+
+#### 0.13.1
+  - Update iterable/flatten to flatten to a specified deptha
 
 #### 0.13.0
   - Add iterable/flatten

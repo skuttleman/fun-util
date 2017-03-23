@@ -189,7 +189,12 @@ describe('iterable', () => {
     it('flattens arrays', () => {
       expect(flatten([1, [2], 3, [[4], 5], 6])).toEqual([1, 2, 3, 4, 5, 6]);
     });
-  })
+
+    it('flattens to a specified depth', () => {
+      const result = flatten([[1, 2, 3], 4, [5, [6, [7, [8]]]]], 2);
+      expect(result).toEqual([1, 2, 3, 4, 5, 6, [7, [8]]]);
+    });
+  });
 
   describe('forEach', () => {
     it('works on arrays', () => {
