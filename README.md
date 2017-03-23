@@ -338,7 +338,7 @@ Methods that apply to iterable objects, arrays, and strings.
 ```js
 const { iterable } = require('fun-util');
 Object.keys(iterable);
-// => ['any', 'concat', 'every', 'filter', 'find', 'first', 'firstRest', 'flatMap', 'forEach', 'hasKey', 'last', 'map', 'mapFilter', 'reduce', 'rest', 'reverse', 'size', 'sort', 'splitWhen', 'takeUntil', 'takeWhile', 'truncate', 'truncateLast']
+// => ['any', 'concat', 'every', 'filter', 'find', 'first', 'firstRest', 'flatMap', 'flatten', 'forEach', 'hasKey', 'last', 'map', 'mapFilter', 'reduce', 'rest', 'reverse', 'size', 'sort', 'splitWhen', 'takeUntil', 'takeWhile', 'truncate', 'truncateLast']
 ```
 
 #### -`any`
@@ -426,12 +426,23 @@ items
 This flattens a 2 or more dimensional array and maps the result through mapping functions if provided.
 
 ```js
-const { flatMap } = require('flatMap');
+const { flatMap } = require('fun-util');
 
 flatMap([[1], [[2], 3], 4]);
 // => [1, 2, 3, 4]
 flatMap([[1], [[2], 3], 4], number => number * 2, number => number + 3);
 // => [5, 7, 9, 11]
+```
+
+### -`flatten`
+
+Flattens a multi-dimensional array.
+
+```js
+const { flatten } = require('fun-util');
+
+flatten([[1], [[2], 3], 4, [[5], 6]]);
+// => [1, 2, 3, 4, 5, 6]
 ```
 
 #### -`forEach`
@@ -822,6 +833,9 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 <a name="change-notes"></a>
 
 ### 6.1\. Change Notes
+
+#### 0.13.0
+  - Add iterable/flatten
 
 #### 0.12.1
   - Fix bug with iterable/reduce when calling on empty collection

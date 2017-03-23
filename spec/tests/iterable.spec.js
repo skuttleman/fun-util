@@ -1,7 +1,7 @@
 const {
   any, concat, every, filter, find, first, firstRest, flatMap,
-  forEach, last, map, mapFilter, reduce, rest, reverse, size,
-  sort, splitWhen, takeUntil, takeWhile, truncate, truncateLast
+  flatten, forEach, last, map, mapFilter, reduce, rest, reverse,
+  size, sort, splitWhen, takeUntil, takeWhile, truncate, truncateLast
 } = require('../../src/iterable');
 
 describe('iterable', () => {
@@ -184,6 +184,12 @@ describe('iterable', () => {
       expect(flatMap([1, [2], 3, [[4], 5], 6])).toEqual([1, 2, 3, 4, 5, 6]);
     });
   });
+
+  describe('flatten', () => {
+    it('flattens arrays', () => {
+      expect(flatten([1, [2], 3, [[4], 5], 6])).toEqual([1, 2, 3, 4, 5, 6]);
+    });
+  })
 
   describe('forEach', () => {
     it('works on arrays', () => {

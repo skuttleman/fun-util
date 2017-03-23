@@ -7,6 +7,7 @@ module.exports = {
   first: require('./first'),
   firstRest: require('./firstRest'),
   flatMap: require('./flatMap'),
+  flatten: require('./flatten'),
   forEach: require('./forEach'),
   hasKey: require('./hasKey'),
   last: require('./last'),
