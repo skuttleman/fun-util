@@ -11,5 +11,6 @@ module.exports = {
   partialReverse: require('./partialReverse'),
   silent: require('./silent'),
   thread: require('./thread'),
-  through: require('./through')
+  through: require('./through'),
+  truncateArgs: require('./truncateArgs')
 };

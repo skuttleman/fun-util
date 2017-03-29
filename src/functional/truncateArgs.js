@@ -1,0 +1,1 @@
+module.exports = (fn, limit) => (...args) => fn(...args.slice(0, limit));

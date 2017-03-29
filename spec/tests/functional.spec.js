@@ -1,6 +1,6 @@
 const {
   complement, compose, enforceTypes, ifn, memoize, overload,
-  partial, partialReverse, silent, thread, through
+  partial, partialReverse, silent, thread, through, truncateArgs
 } = require('../../src/functional');
 const { ArityMismatchError } = require('../../src/utils/errors');
 
@@ -280,6 +280,26 @@ describe('functional', () => {
       const spy = jasmine.createSpy('spy').and.returnValue(17);
       const output = through(spy)(3, -3);
       expect(output).toEqual(3);
+    });
+  });
+
+  describe('truncateArgs', () => {
+    it('passes the specified number of arguments', () => {
+      const spy = jasmine.createSpy('spy');
+      const fn = truncateArgs(spy, 1);
+
+      fn(1, 2, 3);
+
+      expect(spy).toHaveBeenCalledWith(1);
+    });
+
+    it('passes all arguments if there are less than requested', () => {
+      const spy = jasmine.createSpy('spy');
+      const fn = truncateArgs(spy, 17);
+
+      fn(1, 2, undefined);
+
+      expect(spy).toHaveBeenCalledWith(1, 2, undefined);
     });
   });
 });
