@@ -1,28 +1,31 @@
-const deepCopy = require('./deepCopy');
 const firstRest = require('../iterable/firstRest');
 const truncateLast = require('../iterable/truncateLast');
+const type = require('./type');
 
 const setup = (item, key) => {
-  if (item && typeof item === 'object') {
-    return item;
+  switch (type(item)) {
+    case 'array':
+      return [...item];
+    case 'object':
+      return {...item};
+    default:
+      return parseInt(key) === key ? [] : {};
   }
-  return parseInt(key) === key ? [] : {};
 };
 
 const updateIn = (item, keys, value) => {
+  const [key, remaining] = firstRest(keys);
   if (keys.length) {
-    let [key, remaining] = firstRest(keys);
-    item = setup(item, key);
-    item[key] = updateIn(item[key], remaining, value);
-    return item;
+    const newItem = setup(item, key);
+    newItem[key] = updateIn(newItem[key], remaining, value);
+    return newItem;
   }
   return value;
 };
 
 module.exports = (item, ...args) => {
-  const copy = deepCopy(item);
   if (args.length) {
-    return updateIn(copy, ...truncateLast(args));
+    return updateIn(item, ...truncateLast(args));
   }
-  return copy;
+  return item;
 };

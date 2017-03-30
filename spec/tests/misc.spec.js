@@ -101,20 +101,23 @@ describe('misc', () => {
       original = { a: { b: { c: { d: 1 } } } };
     });
 
-    it('returns a copy', () => {
-      const someObject = { a: 1 };
-      const newObject = updateIn(original, 'a', 'b', 'c', 'd', 2);
-
-      expect(original).toEqual({ a: { b: { c: { d: 1 } } } });
-      expect(original === newObject).toEqual(false);
-      expect(updateIn(someObject, 1)).toEqual(1);
-      expect(updateIn(someObject) === someObject).toEqual(false);
-    });
-
     it('sets a value', () => {
       let newValue = updateIn(original, 'a', 'b', 'c', 'd', 2);
 
       expect(newValue).toEqual({ a: { b: { c: { d: 2 } } } });
+    });
+
+    it('works with arrays', () => {
+      let newValue = updateIn([1, [2, [3, [4]]]], 1, 1, 1, 0, 7);
+
+      expect(newValue).toEqual([1, [2, [3, [7]]]]);
+    });
+
+    it('does not mutate original object', () => {
+      const someObject = { a: 1 };
+      const newObject = updateIn(original, 'a', 'b', 'c', 'd', 2);
+
+      expect(original).toEqual({ a: { b: { c: { d: 1 } } } });
     });
 
     it('creates nested objects if key not found', () => {

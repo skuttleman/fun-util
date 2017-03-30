@@ -191,8 +191,11 @@ describe('iterable', () => {
     });
 
     it('flattens to a specified depth', () => {
-      const result = flatten([[1, 2, 3], 4, [5, [6, [7, [8]]]]], 2);
-      expect(result).toEqual([1, 2, 3, 4, 5, 6, [7, [8]]]);
+      const depthTwo = flatten([[1, 2, 3], 4, [5, [6, [7, [8]]]]], 2);
+      expect(depthTwo).toEqual([1, 2, 3, 4, 5, 6, [7, [8]]]);
+
+      const depthZero = flatten([[1, 2, 3], 4, [5, [6, [7, [8]]]]], 0);
+      expect(depthZero).toEqual([[1, 2, 3], 4, [5, [6, [7, [8]]]]]);
     });
   });
 
