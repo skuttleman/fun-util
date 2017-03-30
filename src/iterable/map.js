@@ -3,7 +3,7 @@ const getIn = require('../misc/getIn');
 const join = require('../array/join');
 const rest = require('./rest');
 const splitWhen = require('./splitWhen');
-const type = require('../misc/type');
+const type = require('../value/type');
 
 const applyFns = (value, items, key, mappers) => {
   let values = rest(items.map(item => item[key]));

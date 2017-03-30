@@ -1,5 +1,5 @@
 const join = require('../array/join');
-const type = require('../misc/type');
+const type = require('../value/type');
 
 const defaultSorter = (a, b) => {
   if (a < b) {

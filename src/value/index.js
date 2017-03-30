@@ -1,4 +1,5 @@
 module.exports = {
   isEmpty: require('./isEmpty'),
-  isNothing: require('./isNothing')
+  isNothing: require('./isNothing'),
+  type: require('./type')
 };

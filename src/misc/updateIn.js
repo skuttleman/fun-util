@@ -1,6 +1,6 @@
 const firstRest = require('../iterable/firstRest');
 const truncateLast = require('../iterable/truncateLast');
-const type = require('./type');
+const type = require('../value/type');
 
 const setup = (item, key) => {
   switch (type(item)) {

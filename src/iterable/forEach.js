@@ -1,4 +1,4 @@
-const type = require('../misc/type');
+const type = require('../value/type');
 const splitWhen = require('./splitWhen');
 
 const keyType = (item, key) => type(item) === 'object' ? key : Number(key);

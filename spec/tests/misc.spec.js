@@ -68,33 +68,6 @@ describe('misc', () => {
     });
   });
 
-  describe('type', () => {
-    it('recognizes an array', () => {
-      expect(type([])).toEqual('array');
-    });
-
-    it('recognizes a function', () => {
-      expect(type(() => null)).toEqual('function');
-    });
-
-    it('recognizes a number', () => {
-      expect(type(1)).toEqual('number');
-    });
-
-    it('recognizes an object', () => {
-      expect(type({})).toEqual('object');
-      expect(type(null)).toEqual('object');
-    });
-
-    it('recognizes a string', () => {
-      expect(type('something')).toEqual('string');
-    });
-
-    it('recognizes undefined', () => {
-      expect(type(undefined)).toEqual('undefined');
-    });
-  });
-
   describe('updateIn', () => {
     let original;
     beforeEach(() => {

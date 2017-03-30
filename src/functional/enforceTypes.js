@@ -1,6 +1,6 @@
 const forEach = require('../iterable/forEach');
 const truncateLast = require('../iterable/truncateLast');
-const type = require('../misc/type');
+const type = require('../value/type');
 
 const isBadType = (value, Type) => {
   return value === undefined ||

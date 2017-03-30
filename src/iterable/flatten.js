@@ -1,5 +1,5 @@
 import reduce from './reduce';
-const type = require('../misc/type');
+const type = require('../value/type');
 
 const flatten = (input, depth = -1) => {
   if (type(input) === 'array' && depth !== 0) {

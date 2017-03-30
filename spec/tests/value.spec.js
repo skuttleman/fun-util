@@ -1,4 +1,4 @@
-const { isEmpty, isNothing } = require('../../src/value');
+const { isEmpty, isNothing, type } = require('../../src/value');
 
 describe('value', () => {
   describe('isEmpty', () => {
@@ -44,6 +44,33 @@ describe('value', () => {
       const tests = [0, 1, '', 'string', [], [1, 2, 3], {}, {a: 1}, () => null, NaN];
 
       tests.forEach(test => expect(isNothing(test)).toEqual(false));
+    });
+  });
+
+  describe('type', () => {
+    it('recognizes an array', () => {
+      expect(type([])).toEqual('array');
+    });
+
+    it('recognizes a function', () => {
+      expect(type(() => null)).toEqual('function');
+    });
+
+    it('recognizes a number', () => {
+      expect(type(1)).toEqual('number');
+    });
+
+    it('recognizes an object', () => {
+      expect(type({})).toEqual('object');
+      expect(type(null)).toEqual('object');
+    });
+
+    it('recognizes a string', () => {
+      expect(type('something')).toEqual('string');
+    });
+
+    it('recognizes undefined', () => {
+      expect(type(undefined)).toEqual('undefined');
     });
   });
 });

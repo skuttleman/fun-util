@@ -2,7 +2,7 @@ const first = require('./first');
 const identity = require('../functional/identity');
 const rest = require('./rest');
 const splitWhen = require('./splitWhen');
-const type = require('../misc/type');
+const type = require('../value/type');
 
 const setup = (item, args) => {
   const transform = (type(item) === 'object') ? identity : Number;
