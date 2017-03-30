@@ -16,5 +16,6 @@ module.exports = exp({
   iterable: require('./lib/iterable'),
   misc: require('./lib/misc'),
   promise: require('./lib/promise'),
-  string: require('./lib/string')
+  string: require('./lib/string'),
+  value: require('./lib/value')
 });

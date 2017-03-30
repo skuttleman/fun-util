@@ -10,6 +10,7 @@
 4.4\. [Misc](#misc)  
 4.5\. [Promise](#promise)  
 4.6\. [String](#string)  
+4.7\. [Value](#value)  
 5\. [Testing](#testing)  
 6\. [Contributions](#contributions)  
 6.1\. [Change Notes](#change-notes)  
@@ -118,7 +119,7 @@ Basic operations that either accept a function, return a function, or do not car
 ```js
 const { functional } = require('fun-util');
 Object.keys(functional);
-// => ['apply', 'complement', 'compose', 'enforceTypes', 'identity', 'ifn', 'memoize', 'overload', 'partial', 'partialReverse', 'silent', 'thread', 'through']
+// => ['apply', 'complement', 'compose', 'enforceTypes', 'identity', 'ifn', 'memoize', 'overload', 'partial', 'partialReverse', 'silent', 'thread', 'through', 'truncateArgs']
 ```
 
 #### -`apply`
@@ -327,6 +328,23 @@ map([1, 2, 3], through(console.log), number => number * 2);
 // => [2, 4, 6]
 ```
 
+#### -`truncateArgs`
+
+Returns a function that limits the number of args passed to the suplied function.
+
+```js
+const { forEach, truncateArgs } = require('fun-util');
+
+forEach(['a', 'b', 'c'], console.log);
+// a 0 ['a', 'b', 'c']
+// b 1 ['a', 'b', 'c']
+// c 2 ['a', 'b', 'c']
+forEach(['a', 'b', 'c'], truncateArgs(console.log, 1));
+// a
+// b
+// c
+```
+
 <a name="iterable"></a>
 
 ### 4.3\. Iterable
@@ -387,7 +405,7 @@ filter({ a: 1, b: 2, c: 'c' }, Number);
 
 #### -`find`
 
-The `Array.prototype` method adapted to work with strings and objects.
+The `Array.prototype` method adapted to work with strings and objects. Note that finding something in an object may return varying results as the order of keys being iterated over is not guaranteed.
 
 ```js
 const { find } = require('fun-util');
@@ -643,7 +661,7 @@ Useful miscellaneous methods.
 ```js
 const { misc } = require('fun-util');
 Object.keys(misc);
-// => ['deepCopy', 'deepEqual', 'getIn', 'slice', 'type', 'updateIn']
+// => ['deepCopy', 'deepEqual', 'getIn', 'slice', 'updateIn']
 ```
 
 #### -`deepCopy`
@@ -699,19 +717,6 @@ slice([1, 2, 3, 4], 2);
 // => [3, 4]
 ```
 
-#### - `type`
-
-An improved version of `typeof` which can tell the difference between 'array' and 'object'.
-
-```js
-const { type } = require('fun-util');
-
-typeof [1, 2, 3];
-// => 'object'
-type([1, 2, 3]);
-// => 'array'
-```
-
 #### - `updateIn`
 
 Copies and sets nested value where the first argument is the starting data structure, the last
@@ -737,7 +742,19 @@ Helpers built on the standard Promise library.
 ```js
 const { promise } = require('fun-util');
 Object.keys(promise);
-// => ['chain', 'rejectThrough', 'resolveThrough']
+// => ['asyncWhile', 'chain', 'rejectThrough', 'resolveThrough', 'sleep']
+```
+
+#### -`asyncWhile`
+
+Takes a promise and a function to be run repeatedly until the promise resolves. This returns a promise that resolves or rejects the same data/error resolved or rejected by the supplied promise. Note that the function is run using `setInterval`. For more on how that will be run, see [documentation for NodeJS](https://nodejs.org/api/timers.html#timers_setinterval_callback_delay_args).
+
+```js
+const { asyncWhile } = require('fun-util');
+
+asyncWhile(fetchApiData(), updateProgressBar)
+  .then(processApiData)
+  .catch(handleApiError);
 ```
 
 #### -`chain`
@@ -784,6 +801,16 @@ doSomethingImportant()
 // => finishSuccessfully(data)
 ```
 
+#### -`sleep`
+
+A promise wrapper around `setTimeout`. For more on how that will be run, see [documentation for NodeJS](https://nodejs.org/api/timers.html#timers_settimeout_callback_delay_args).
+
+```js
+const { sleep } = require('fun-util');
+
+sleep(1000).then(() => console.log('it has been (at least) one second'));
+```
+
 <a name="string"></a>
 
 ### 4.6\. String
@@ -817,6 +844,59 @@ split('string', 't');
 // => ['s', 'ring']
 ```
 
+<a name="value"></a>
+
+### 4.7\. Value
+
+Functions that qualify an input's value.
+
+#### All Value methods
+
+```js
+const { string } = require('fun-util');
+Object.keys(string);
+// => ['isEmpty', 'isNothing', 'type']
+```
+
+#### -`isEmpty`
+
+Returns `true` or `false` for any values based on their "truthiness" or "falsiness". Also returns `false` for empty arrays or empty objects.
+
+```js
+const { isEmpty } = require('fun-util');
+
+isEmpty([]);
+// => true
+isEmpty([1, 2, 3]);
+// => false
+```
+
+#### -`isNothing`
+
+Returns `true` for `null` and `undefined`. Returns `false` for all other values.
+
+```js
+const { isNothing } = require('fun-util');
+
+isNothing(false);
+// => false
+isNothing(null);
+// => true
+```
+
+#### -`type`
+
+An improved version of `typeof` which differentiates between `array` and `object`.
+
+```js
+const { type } = require('fun-util');
+
+typeof [1, 2, 3];
+// => 'object'
+type([1, 2, 3]);
+// => 'array'
+```
+
 <a name="testing"></a>
 
 ## 5\. Testing
@@ -836,6 +916,13 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 <a name="change-notes"></a>
 
 ### 6.1\. Change Notes
+
+#### 1.0.0
+  - Move misc/type to value/type
+  - Add promise/sleep and promise/asyncWhile
+  - Add value/isEmpty and value/isNothing
+  - Improve misc/updateIn performance and tests
+  - Add functional/truncateArgs
 
 #### 0.13.1
   - Update iterable/flatten to flatten to a specified deptha
