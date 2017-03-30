@@ -1,7 +1,52 @@
-const { chain, rejectThrough, resolveThrough } = require('../../src/promise');
+const {
+  asyncWhile, chain, rejectThrough, resolveThrough, sleep
+} = require('../../src/promise');
 const noop = () => null;
 
 describe('promise', () => {
+  describe('asyncWhile', () => {
+    it('does the action while awaiting the promise', done => {
+      const promise = new Promise(resolve => {
+        setTimeout(resolve, 100);
+      });
+      const action = jasmine.createSpy('action');
+
+      asyncWhile(promise, action).then(() => {
+        const count = action.calls.count();
+        expect(action).toHaveBeenCalled();
+
+        setTimeout(() => {
+          expect(count).toEqual(action.calls.count());
+          done();
+        }, 100);
+      });
+    });
+
+    it('resolves the data', done => {
+      const promise = new Promise(resolve => {
+        setTimeout(() => resolve('data'), 0);
+      });
+      const action = jasmine.createSpy('action');
+
+      asyncWhile(promise, action).then(data => {
+        expect(data).toEqual('data');
+      }).then(done);
+    });
+
+    it('rejects the error', done => {
+      const promise = new Promise((_, reject) => {
+        setTimeout(() => reject('error'), 0);
+      });
+      const action = jasmine.createSpy('action');
+
+      asyncWhile(promise, action)
+        .then(fail)
+        .catch(error => {
+          expect(error).toEqual('error');
+        }).then(done);
+    });
+  });
+
   describe('chain', () => {
     it('invokes all promises', done => {
       const promise1 = jasmine.createSpy('promise1').and.returnValue(new Promise(resolve => resolve()));
@@ -117,4 +162,19 @@ describe('promise', () => {
         }).then(done, done);
     });
   });
-})
+
+  describe('sleep', () => {
+    it('resolves a promise', done => {
+      sleep(100).then(done, fail); 
+    });
+
+    it('does not resolve before the timeout expires', done => {
+      const spy = jasmine.createSpy('spy');
+      sleep(100).then(spy);
+      setTimeout(() => {
+        expect(spy).not.toHaveBeenCalled();
+        done();
+      }, 99);
+    });
+  });
+});
