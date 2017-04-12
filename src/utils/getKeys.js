@@ -1,0 +1,1 @@
+module.exports = object => object ? Object.keys(object) : [];

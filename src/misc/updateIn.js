@@ -7,9 +7,11 @@ const setup = (item, key) => {
     case 'array':
       return [...item];
     case 'object':
-      return {...item};
+      if (item) {
+        return {...item};
+      }
     default:
-      return parseInt(key) === key ? [] : {};
+      return Math.abs(parseInt(key)) === key ? [] : {};
   }
 };
 

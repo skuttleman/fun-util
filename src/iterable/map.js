@@ -34,7 +34,7 @@ const map = (...args) => {
   return getIn({
     array: mapArray(items, mappers),
     string: join(mapArray(items, mappers))
-  }, type(items[0])) || mapObject(items, mappers) ;
+  }, type(items[0])) || mapObject(items, mappers);
 };
 
 module.exports = map;

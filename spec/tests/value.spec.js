@@ -1,4 +1,4 @@
-const { isEmpty, isNothing, type } = require('../../src/value');
+const { isEmpty, isEqual, isNaN, isNothing, type } = require('../../src/value');
 
 describe('value', () => {
   describe('isEmpty', () => {
@@ -30,6 +30,43 @@ describe('value', () => {
       expect(isEmpty({a: 1, b: 2, c: 3})).toEqual(false);
 
       expect(isEmpty({})).toEqual(true);
+    });
+  });
+
+  describe('isEqual', () => {
+    it('compares values', () => {
+      const result = isEqual(17, 17);
+
+      expect(result).toEqual(true);
+    });
+
+    it('compares without type coersion', () => {
+      const result = isEqual(1, '1');
+      
+      expect(result).toEqual(false);
+    });
+
+    it('works with NaN', () => {
+      const result = isEqual(NaN, NaN);
+
+      expect(result).toEqual(true);
+    });
+
+    it('does not treat undefined like NaN', () => {
+      const result = isEqual(NaN, undefined);
+
+      expect(result).toEqual(false);
+    });
+  });
+
+  describe('isNaN', () => {
+    it('identifies NaN', () => {
+      expect(isNaN(NaN)).toEqual(true);
+    });
+
+    it('does not treat undefined as NaN', () => {
+      expect(isNaN(undefined)).toEqual(false);
+      expect(isNaN()).toEqual(false);
     });
   });
 

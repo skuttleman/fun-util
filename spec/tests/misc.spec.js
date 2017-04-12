@@ -1,15 +1,95 @@
 const {
-  deepCopy, deepEqual, getIn, slice, type, updateIn
+  deepCompare, deepCopy, deepEqual, deepMerge, getIn, slice, type, updateIn
 } = require('../../src/misc');
 
 describe('misc', () => {
+  describe('deepCompare', () => {
+    it('works on primatives', () => {
+      expect(deepCompare('some string', 'some string')).toEqual(undefined);
+      expect(deepCompare('some string', 'some other string')).toEqual('"some string" != "some other string"');
+
+      expect(deepCompare(13, 13)).toEqual(undefined);
+      expect(deepCompare(13, '13')).toEqual('13 != "13"');
+
+      expect(deepCompare(false, null)).toEqual('false != null');
+    });
+
+    it('works on objects', () => {
+      expect(deepCompare({ a: 'value' }, { a: 'value' })).toEqual(undefined);
+      expect(deepCompare({ a: 'value' }, { a: 'another value' })).toEqual({ a: '"value" != "another value"' });
+    });
+
+    it('works on arrays', () => {
+      expect(deepCompare([{ a: 'value' }], [{ a: 'value' }])).toEqual(undefined);
+      expect(deepCompare([{ a: 'value' }], [{ a: 'another value' }])).toEqual([{ a: '"value" != "another value"' }]);
+    });
+
+    it('recognizes extra keys', () => {
+      expect(deepCompare([1, 2, 3], [1, 2, 3, 4])).toEqual(['undefined != 4']);
+      expect(deepCompare({ a: 1, b: 2 }, { a: 1, b: 2, c: 3 })).toEqual({ c: 'undefined != 3' });
+    });
+
+    it('matches on type', () => {
+      expect(deepCompare({ '0': 'value' }, ['value'])).toEqual('type mismatch');
+    });
+
+    it('works with NaN', () => {
+      expect(deepCompare(NaN, NaN)).toEqual(undefined);
+      expect(deepCompare(NaN, undefined)).toEqual('NaN != undefined');
+    });
+
+    it('works on compound, nested values', () => {
+      const value1 = {
+        a: [1, 2, { a: 0 }],
+        b: 'string',
+        c: {
+          d: {
+            f: [{}, { a: 'b' }]
+          },
+          e: {
+            g: -33
+          }
+        }
+      };
+      const value2 = {
+        a: [1, 2, { a: 0 }],
+        b: 'string',
+        c: {
+          d: {
+            f: [{ x: 'extra' }, null, { a: 'b' }]
+          },
+          e: {
+            g: -33
+          }
+        }
+      };
+      const expected = {
+        c: {
+          d: {
+            f: [
+              {
+                x: 'undefined != "extra"'
+              },
+              '{"a":"b"} != null',
+              'undefined != {"a":"b"}'
+              ]
+            }
+          }
+        };
+
+      const result = deepCompare(value1, value2);
+
+      expect(result).toEqual(expected);
+    });
+  });
+
   describe('deepCopy', () => {
     it('works on arrays', () => {
       const input = [1, 2, { 3: 4 }];
       const copy = deepCopy(input);
       expect(copy instanceof Array).toEqual(true);
       expect(copy).toEqual(input);
-      expect(copy === input).toEqual(false);
+      expect(copy).not.toBe(input);
     });
 
     it('works on objects', () => {
@@ -17,7 +97,7 @@ describe('misc', () => {
       const copy = deepCopy(input);
       expect(copy instanceof Object).toEqual(true);
       expect(copy).toEqual(input);
-      expect(copy === input).toEqual(false);
+      expect(copy).not.toBe(input);
 
       copy.b = 17;
       expect(input.a()).toEqual({ c: [1, 2, 3] });
@@ -95,11 +175,13 @@ describe('misc', () => {
 
     it('creates nested objects if key not found', () => {
       let newValue = updateIn(original, 'b', 'c', 'd', 2);
+      expect(newValue).toEqual({ a: { b: { c: { d: 1 } } }, b: { c: { d: 2 } } });
 
-      expect(newValue).toEqual({ a: { b: { c: { d: 1 } } }, b: { c: { d: 2} } });
+      newValue = updateIn(null, 0.1, -1, 'some value');
+      expect(newValue).toEqual({ '0.1': { '-1': 'some value' } });
     });
 
-    it('creates nested arrays if integer key not found', () => {
+    it('creates nested arrays if positive integer key not found', () => {
       let newValue = updateIn(original, 0, 1, '2', 2);
 
       expect(newValue).toEqual({ a: { b: { c: { d: 1 } } }, 0: [undefined, { 2: 2 }] });
