@@ -1,1 +1,3 @@
-module.exports = item => item.length || Object.keys(item).length;
+const getKeys = require('../utils/getKeys');
+
+module.exports = item => getKeys(item).length;

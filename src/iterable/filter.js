@@ -1,9 +1,10 @@
 const concat = require('../iterable/concat');
+const getKeys = require('../utils/getKeys');
 const join = require('../array/join');
 const type = require('../value/type');
 
 const filter = (object, condition) => {
-  return Object.keys(object).reduce((result, key) => {
+  return getKeys(object).reduce((result, key) => {
     if (condition(object[key], key, object)) {
       return concat(result, { [key]: object[key] });
     }

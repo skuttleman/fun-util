@@ -12,6 +12,7 @@ module.exports = {
   hasKey: require('./hasKey'),
   last: require('./last'),
   map: require('./map'),
+  mapAllKeys: require('./mapAllKeys'),
   mapFilter: require('./mapFilter'),
   reduce: require('./reduce'),
   rest: require('./rest'),

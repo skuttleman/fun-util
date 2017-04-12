@@ -1,5 +1,6 @@
 const firstRest = require('./firstRest');
 const getIn = require('../misc/getIn');
+const getKeys = require('../utils/getKeys');
 const join = require('../array/join');
 const rest = require('./rest');
 const splitWhen = require('./splitWhen');
@@ -15,7 +16,7 @@ const applyFns = (value, items, key, mappers) => {
 };
 
 const mapObject = (objects, mappers) => {
-  return Object.keys(objects[0]).reduce((object, key) => {
+  return getKeys(objects[0]).reduce((object, key) => {
     return {
       ...object,
       [key]: applyFns(objects[0][key], objects, key, mappers)

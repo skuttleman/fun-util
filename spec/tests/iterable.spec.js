@@ -1,6 +1,6 @@
 const {
-  any, concat, every, filter, find, first, firstRest, flatMap,
-  flatten, forEach, last, map, mapFilter, reduce, rest, reverse,
+  any, concat, every, filter, find, first, firstRest, flatMap, flatten,
+  forEach, last, map, mapAllKeys, mapFilter, reduce, rest, reverse,
   size, sort, splitWhen, takeUntil, takeWhile, truncate, truncateLast
 } = require('../../src/iterable');
 
@@ -71,7 +71,7 @@ describe('iterable', () => {
       let result = filter(input, Boolean);
       expect(result).toEqual(input);
 
-      input= [0, '', null, undefined, false, NaN];
+      input = [0, '', null, undefined, false, NaN];
       result = filter(input, value => !value);
       expect(result).toEqual(input);
 
@@ -104,7 +104,7 @@ describe('iterable', () => {
       let result = find(input, input => input.constructor === String);
       expect(result).toEqual('string');
 
-      input= [0, '', null, undefined, false, NaN];
+      input = [0, '', null, undefined, false, NaN];
       result = find(input, value => value === false);
       expect(result).toEqual(false);
 
@@ -241,7 +241,7 @@ describe('iterable', () => {
 
     it('uses keys and context from first input', () => {
       const forEachSpy = jasmine.createSpy('forEachSpy');
-      forEach([1, 2, 3], 'string', {0: 'soup', ignored: 'value'}, forEachSpy);
+      forEach([1, 2, 3], 'string', { 0: 'soup', ignored: 'value' }, forEachSpy);
 
       expect(forEachSpy).toHaveBeenCalledWith(1, 's', 'soup', 0, [1, 2, 3]);
       expect(forEachSpy).toHaveBeenCalledWith(2, 't', undefined, 1, [1, 2, 3]);
@@ -304,6 +304,52 @@ describe('iterable', () => {
     });
   });
 
+  describe('mapAllKeys', () => {
+    it('works on objects', () => {
+      const spy = jasmine.createSpy('mapAllKeysSpy').and.returnValue(3);
+
+      const result = mapAllKeys({ a: 1 }, { b: 2 }, spy);
+
+      expect(result).toEqual({ a: 3, b: 3 });
+      expect(spy).toHaveBeenCalledWith(1, undefined, 'a', jasmine.any(Object));
+      expect(spy).toHaveBeenCalledWith(undefined, 2, 'b', jasmine.any(Object));
+    });
+
+    it('works on arrays', () => {
+      const spy = jasmine.createSpy('mapAllKeysSpy').and.returnValue(3);
+
+      const result = mapAllKeys([1], [2, 3], spy);
+
+      expect(result).toEqual([3, 3]);
+      expect(spy).toHaveBeenCalledWith(1, 2, '0', jasmine.any(Object));
+      expect(spy).toHaveBeenCalledWith(undefined, 3, '1', jasmine.any(Object));
+    });
+
+    it('works on strings', () => {
+      const spy = jasmine.createSpy('mapAllKeysSpy').and.returnValue(3);
+
+      const result = mapAllKeys('abc', 'de', spy);
+
+      expect(result).toEqual('333');
+      expect(spy).toHaveBeenCalledWith('a', 'd', '0', jasmine.any(Object));
+      expect(spy).toHaveBeenCalledWith('b', 'e', '1', jasmine.any(Object));
+      expect(spy).toHaveBeenCalledWith('c', undefined, '2', jasmine.any(Object));
+    });
+
+    it('drops extra keys for arrays and strings', () => {
+      const spy = jasmine.createSpy('mapAllKeysSpy').and.callFake((_, character) => character);
+
+      const result = mapAllKeys([1, 2, 3], '456', { '-1': -1, c: 'c', '1': 9 }, spy);
+
+      expect(result).toEqual(['4', '5', '6']);
+      expect(spy).toHaveBeenCalledWith(1, '4', undefined, '0', jasmine.any(Object));
+      expect(spy).toHaveBeenCalledWith(2, '5', 9, '1', jasmine.any(Object));
+      expect(spy).toHaveBeenCalledWith(3, '6', undefined, '2', jasmine.any(Object));
+      expect(spy).toHaveBeenCalledWith(undefined, undefined, -1, '-1', jasmine.any(Object));
+      expect(spy).toHaveBeenCalledWith(undefined, undefined, 'c', 'c', jasmine.any(Object));
+    });
+  });
+
   describe('mapFilter', () => {
     it('works on arrays', () => {
       const fn = number => number % 2 === 0 ? number * 2 : undefined;
@@ -332,7 +378,7 @@ describe('iterable', () => {
 
     it('works on strings', () => {
       const result = reduce('abc', (object, letter, index) => {
-        return {...object, [letter]: index };
+        return { ...object, [letter]: index };
       }, {});
       expect(result).toEqual({ a: 0, b: 1, c: 2 });
     });
@@ -355,7 +401,7 @@ describe('iterable', () => {
     it('reduces without default value', () => {
       expect(reduce({ a: 1, b: 2, c: 3 }, (a, b) => a + b)).toEqual(6);
       expect(reduce('abcdefg', (_, letter) => letter)).toEqual('g');
-      expect(reduce([1,2,3,4], (a, b) => a * b)).toEqual(24);
+      expect(reduce([1, 2, 3, 4], (a, b) => a * b)).toEqual(24);
     });
 
     it('works with empty values', () => {

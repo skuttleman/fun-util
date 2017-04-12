@@ -1,8 +1,3 @@
-const type = require('../value/type');
+const size = require('../iterable/size');
 
-module.exports = item => {
-  if (item && typeof item === 'object') {
-    return !Object.keys(item).length;
-  }
-  return !item;
-};
+module.exports = item => item instanceof Object ? !size(item) : !item;

@@ -1,4 +1,5 @@
 const first = require('./first');
+const getKeys = require('../utils/getKeys');
 const identity = require('../functional/identity');
 const rest = require('./rest');
 const splitWhen = require('./splitWhen');
@@ -6,7 +7,7 @@ const type = require('../value/type');
 
 const setup = (item, args) => {
   const transform = (type(item) === 'object') ? identity : Number;
-  const [key, ...keys] = Object.keys(item);
+  const [key, ...keys] = getKeys(item);
   if (args.length) {
     return { transform, keys: [key, ...keys], start: first(args) };
   }
@@ -23,7 +24,7 @@ const reduce = (items, reducer, ...args) => {
 
 module.exports = (...args) => {
   let [items, remaining] = splitWhen(args, arg => type(arg) === 'function');
-  if (Object.keys(first(items)).length) {
+  if (getKeys(first(items)).length) {
     return reduce(items, ...remaining);
   } else if (remaining.length > 1) {
     return remaining[1];
