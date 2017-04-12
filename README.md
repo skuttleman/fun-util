@@ -356,7 +356,7 @@ Methods that apply to iterable objects, arrays, and strings.
 ```js
 const { iterable } = require('fun-util');
 Object.keys(iterable);
-// => ['any', 'concat', 'every', 'filter', 'find', 'first', 'firstRest', 'flatMap', 'flatten', 'forEach', 'hasKey', 'last', 'map', 'mapFilter', 'reduce', 'rest', 'reverse', 'size', 'sort', 'splitWhen', 'takeUntil', 'takeWhile', 'truncate', 'truncateLast']
+// => ['any', 'concat', 'every', 'filter', 'find', 'first', 'firstRest', 'flatMap', 'flatten', 'forEach', 'hasKey', 'last', 'map', 'mapAllKeys', 'mapFilter', 'reduce', 'rest', 'reverse', 'size', 'sort', 'splitWhen', 'takeUntil', 'takeWhile', 'truncate', 'truncateLast']
 ```
 
 #### -`any`
@@ -507,13 +507,24 @@ last([1, 2, 3]);
 
 #### -`map`
 
-The `Array.prototype` method adapted to work with strings and objects. It accepts multiple items and multiple mapping functions.
+The `Array.prototype` method adapted to work with strings and objects. It accepts multiple items and multiple mapping functions. It maps to the type of the first supplied value.
 
 ```js
 const { map } = require('fun-util');
 
 map({ a: 1, b: 2, c: 3 }, addOne, double, addOne);
 // => { a: 5, b: 7, c: 9 }
+```
+
+#### -`mapAllKeys`
+
+Unlike `map` which only iterates over the first value's keys, `mapAllKeys` iterates over every unique key of all values. Like `map`, `mapAllKeys` returns the type of the first supplied value. When mapping to a string or an array, keys which are not whole numbers are dropped on the floor in the result.
+
+```js
+const { mapAllKeys } = require('fun-util');
+
+mapAllKeys({ a: 1, b: 2}, [0, 1, 2], 'abc', (value1, value2, value3) => value1 || value2 || value3);
+// => { a: 1, b: 2, '0': 'a', '1': 1, '2': 2 }
 ```
 
 #### -`mapFilter`
@@ -661,7 +672,33 @@ Useful miscellaneous methods.
 ```js
 const { misc } = require('fun-util');
 Object.keys(misc);
-// => ['deepCopy', 'deepEqual', 'getIn', 'slice', 'updateIn']
+// => ['deepCompare', 'deepCopy', 'deepEqual', 'deepMerge', 'getIn', 'slice', 'updateIn']
+```
+
+#### -`deepCompare`
+
+Generates a representation of all differences when comparing two values. This was designed more for debugging purposes.
+
+```js
+const { deepCompare } = require('fun-util');
+
+const object1 = {
+  list: [1, 2, 3],
+  data: {
+    favoriteNumber: -11
+  },
+  favoriteColor: 'blue'
+};
+const object2 = {
+  list: [1, 2, 3, 4],
+  data: {
+    favoriteNumber: -11
+  },
+  favoriteColor: 'yellow'
+};
+
+deepCompare(object1, object2);
+// => { list: { '3': 'undefined != 4' }, favoriteColor: '"blue" != "yellow"' }
 ```
 
 #### -`deepCopy`
@@ -693,9 +730,20 @@ deepEqual(x, y);
 // => true
 ```
 
+#### -`deepMerge`
+
+Merges two values with right-hand precedence.
+
+```js
+const { deepMerge } = require('fun-util');
+
+deepMerge({ a: 1, b: [{ c: 2, d: 3 }, 'old string'] }, { e: 4, b: [{ c: 5 }, 'new string'] });
+// => { a: 1, b: [{ c: 5, d: 3 }, 'new string'], e: 4 }
+```
+
 #### -`getIn`
 
-Gets a nested value from a complex object or return undefined.
+Gets a nested value from a complex object or returns undefined.
 
 ```js
 const { getIn } = require('fun-util');
@@ -855,7 +903,7 @@ Functions that qualify an input's value.
 ```js
 const { string } = require('fun-util');
 Object.keys(string);
-// => ['isEmpty', 'isNothing', 'type']
+// => ['isEmpty', 'isEqual', 'isNaN', 'isNothing', 'type']
 ```
 
 #### -`isEmpty`
@@ -869,6 +917,32 @@ isEmpty([]);
 // => true
 isEmpty([1, 2, 3]);
 // => false
+```
+
+#### -`isEqual`
+
+Returns the direct equality comparison of two inputs. The only difference between `isEqual` and `===` is that `isEqual` recognizes that `NaN` and `NaN` are equal.
+
+```js
+const { isEqual } = require('fun-util');
+
+isEqual(NaN, NaN);
+// true
+isEqual({}, {});
+// false
+```
+
+#### -`isNaN`
+
+An improved `isNaN` function that doesn't recognize `undefined` as being `NaN`.
+
+```js
+const betterIsNaN = require('fun-util').isNaN;
+
+isNaN(undefined);
+// true
+betterIsNaN();
+// false
 ```
 
 #### -`isNothing`
@@ -916,6 +990,11 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 <a name="change-notes"></a>
 
 ### 6.1\. Change Notes
+
+#### 1.1.0
+  - Add misc/deepCompare and misc/deepMerge
+  - Add iterable/mapAllKeys
+  - Add value/isEqual and value/isNaN
 
 #### 1.0.0
   - Move misc/type to value/type
