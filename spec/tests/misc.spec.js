@@ -21,11 +21,11 @@ describe('misc', () => {
 
     it('works on arrays', () => {
       expect(deepCompare([{ a: 'value' }], [{ a: 'value' }])).toEqual(undefined);
-      expect(deepCompare([{ a: 'value' }], [{ a: 'another value' }])).toEqual([{ a: '"value" != "another value"' }]);
+      expect(deepCompare([{ a: 'value' }], [{ a: 'another value' }])).toEqual({ '0': { a: '"value" != "another value"' } });
     });
 
     it('recognizes extra keys', () => {
-      expect(deepCompare([1, 2, 3], [1, 2, 3, 4])).toEqual(['undefined != 4']);
+      expect(deepCompare([1, 2, 3], [1, 2, 3, 4])).toEqual({ '3': 'undefined != 4' });
       expect(deepCompare({ a: 1, b: 2 }, { a: 1, b: 2, c: 3 })).toEqual({ c: 'undefined != 3' });
     });
 
@@ -56,7 +56,7 @@ describe('misc', () => {
         b: 'string',
         c: {
           d: {
-            f: [{ x: 'extra' }, null, { a: 'b' }]
+            f: [{ x: 'extra' }, { a: 'b' }, { a: 'b' }]
           },
           e: {
             g: -33
@@ -66,16 +66,15 @@ describe('misc', () => {
       const expected = {
         c: {
           d: {
-            f: [
-              {
+            f: {
+              '0': {
                 x: 'undefined != "extra"'
               },
-              '{"a":"b"} != null',
-              'undefined != {"a":"b"}'
-              ]
+              '2': 'undefined != {"a":"b"}'
             }
           }
-        };
+        }
+      };
 
       const result = deepCompare(value1, value2);
 
@@ -85,7 +84,7 @@ describe('misc', () => {
 
   describe('deepCopy', () => {
     it('works on arrays', () => {
-      const input = [1, 2, { 3: 4 }];
+      const input = [1, 2, { '3': 4 }];
       const copy = deepCopy(input);
       expect(copy instanceof Array).toEqual(true);
       expect(copy).toEqual(input);
@@ -116,6 +115,55 @@ describe('misc', () => {
       const input = { a: { b: { c: [] } } };
       expect(deepEqual(input, { a: { b: { c: [] } } })).toEqual(true);
       expect(deepEqual(input, { a: { b: { c: [], d: undefined } } })).toEqual(false);
+    });
+  });
+
+  describe('deepMerge', () => {
+    it('works on objects', () => {
+      const result = deepMerge({ a: { b: 1 } }, { a: { c: 2 } });
+
+      expect(result).toEqual({ a: { b: 1, c: 2 } });
+    });
+
+    it('works on arrays', () => {
+      const result = deepMerge([[1, 2], [3]], [[1, 4]]);
+
+      expect(result).toEqual([[1, 4], [3]]);
+    });
+
+    it('works on nested values', () => {
+      const value1 = {
+        a: [1, 2, 3],
+        b: {
+          c: [{
+            d: 'd'
+          },
+            88]
+        }
+      };
+      const value2 = {
+        a: [1, 4],
+        b: {
+          c: [{
+            e: 'e'
+          },
+            '88']
+        }
+      };
+      const expected = {
+        a: [1, 4, 3],
+        b: {
+          c: [{
+            d: 'd',
+            e: 'e'
+          },
+            '88']
+        }
+      };
+
+      const result = deepMerge(value1, value2);
+
+      expect(result).toEqual(expected);
     });
   });
 
@@ -184,7 +232,7 @@ describe('misc', () => {
     it('creates nested arrays if positive integer key not found', () => {
       let newValue = updateIn(original, 0, 1, '2', 2);
 
-      expect(newValue).toEqual({ a: { b: { c: { d: 1 } } }, 0: [undefined, { 2: 2 }] });
+      expect(newValue).toEqual({ a: { b: { c: { d: 1 } } }, '0': [undefined, { '2': 2 }] });
     });
   });
 });

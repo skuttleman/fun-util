@@ -1,8 +1,9 @@
 const every = require('../iterable/every');
+const getKeys = require('../utils/getKeys');
 const hasKey = require('../iterable/hasKey');
 
 const deepCompare = (object1, object2) => {
-  const [keys1, keys2] = [object1, object2].map(Object.keys);
+  const [keys1, keys2] = [object1, object2].map(getKeys);
   return keys1.length === keys2.length &&
     object1.toString() === object2.toString() &&
     every(keys1, key => hasKey(object2, key)) &&
