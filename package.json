@@ -1,6 +1,6 @@
 {
   "name": "fun-util",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A collection of reusable helper methods for a variety of occasions.",
   "main": "index.js",
   "directories": {
