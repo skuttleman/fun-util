@@ -1,6 +1,6 @@
 const {
   any, concat, every, filter, find, first, firstRest, flatMap, flatten,
-  forEach, last, map, mapAllKeys, mapFilter, reduce, rest, reverse,
+  forEach, groupBy, last, map, mapAllKeys, mapFilter, reduce, rest, reverse,
   size, sort, splitWhen, takeUntil, takeWhile, truncate, truncateLast
 } = require('../../src/iterable');
 
@@ -256,6 +256,42 @@ describe('iterable', () => {
 
       expect(spy1).toHaveBeenCalledTimes(5);
       expect(spy2).toHaveBeenCalledTimes(5);
+    });
+  });
+
+  describe('groupBy', () => {
+    it('groups into object by grouping function', () => {
+      const collection = [1, 2];
+      const spy = jasmine.createSpy('groupingSpy');
+
+      const result = groupBy(collection, spy);
+
+      expect(spy).toHaveBeenCalledWith(1, 0, [1, 2]);
+      expect(spy).toHaveBeenCalledWith(2, 1, [1, 2]);
+    });
+
+    it('groups an array', () => {
+      const grouper = number => number % 2;
+
+      const result = groupBy([1, 2, 3, 4, 5], grouper);
+
+      expect(result).toEqual({ 0: [2, 4], 1: [1, 3, 5] });
+    });
+
+    it('groups an object', () => {
+      const grouper = number => number % 3;
+
+      const result = groupBy({ a: 1, b: 2, c: 3, d: 4, e: 5 }, grouper);
+
+      expect(result).toEqual({ 0: { c: 3 }, 1: { a: 1, d: 4 }, 2: { b: 2, e: 5 } });
+    });
+
+    it('groups a string', () => {
+      const grouper = letter => letter === letter.toUpperCase();
+
+      const result = groupBy('SomeTitleCaseString', grouper);
+
+      expect(result).toEqual({ true: 'STCS', false: 'omeitleasetring' });
     });
   });
 

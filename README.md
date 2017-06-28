@@ -356,7 +356,7 @@ Methods that apply to iterable objects, arrays, and strings.
 ```js
 const { iterable } = require('fun-util');
 Object.keys(iterable);
-// => ['any', 'concat', 'every', 'filter', 'find', 'first', 'firstRest', 'flatMap', 'flatten', 'forEach', 'hasKey', 'last', 'map', 'mapAllKeys', 'mapFilter', 'reduce', 'rest', 'reverse', 'size', 'sort', 'splitWhen', 'takeUntil', 'takeWhile', 'truncate', 'truncateLast']
+// => ['any', 'concat', 'every', 'filter', 'find', 'first', 'firstRest', 'flatMap', 'flatten', 'forEach', 'groupBy', 'hasKey', 'last', 'map', 'mapAllKeys', 'mapFilter', 'reduce', 'rest', 'reverse', 'size', 'sort', 'splitWhen', 'takeUntil', 'takeWhile', 'truncate', 'truncateLast']
 ```
 
 #### -`any`
@@ -479,6 +479,17 @@ forEach('123' [4, 5, 6], (digit1, digit2) => {
 // => '1 4'
 // => '2 5'
 // => '3 6'
+```
+
+#### = `groupBy`
+
+Splits an object, array, or string by a grouping function and produces an object keyed off the different values the grouping function returns.
+
+```js
+const { groupBy } = require('fun-util');
+
+groupBy([1, 2, 3, 4, 5, 6, 7, 8], number => number % 2 ? 'odd' : 'even');
+// => { odd: [1, 3, 5, 7], even: [2, 4, 6, 8] }
 ```
 
 #### -`hasKey`
@@ -990,6 +1001,9 @@ _Fun-Util_ is open source. Contribute today at [http://www.github.com/skuttleman
 <a name="change-notes"></a>
 
 ### 6.1\. Change Notes
+
+#### 1.2.0
+  - Add iterable/groupBy
 
 #### 1.1.0
   - Add misc/deepCompare and misc/deepMerge

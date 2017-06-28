@@ -9,6 +9,7 @@ module.exports = {
   flatMap: require('./flatMap'),
   flatten: require('./flatten'),
   forEach: require('./forEach'),
+  groupBy: require('./groupBy'),
   hasKey: require('./hasKey'),
   last: require('./last'),
   map: require('./map'),
